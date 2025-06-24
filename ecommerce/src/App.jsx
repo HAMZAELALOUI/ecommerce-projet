@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
@@ -25,7 +25,7 @@ import FloatingActions from './components/FloatingActions.jsx'
 import heroBg from './assets/food.jpg'
 import histoireImg from './assets/desserts.jpg'
 import './App.css'
-import { BrowserRouter as Router, Routes, Route, Link, NavLink } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Link, NavLink, useLocation } from 'react-router-dom'
 import AdminLayout from './components/admin/AdminLayout.jsx'
 import Dashboard from './pages/admin/Dashboard.jsx'
 import ProductsAdmin from './pages/admin/ProductsAdmin.jsx'
@@ -390,6 +390,17 @@ function App() {
   // Hauteur de la navbar (pour calcul dynamique)
   const NAVBAR_HEIGHT = 88 // px (ajuster si besoin)
 
+  const location = useLocation();
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [location]);
+  
   // Scroll vers la section Notre Histoire
   const scrollToHistoire = (e) => {
     e.preventDefault()
@@ -401,30 +412,30 @@ function App() {
   return (
     <motion.div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 bg-white shadow-md z-40">
+      <header className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm shadow-sm z-40">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Link to="/" className="flex items-center space-x-2">
-            <img src={logoImg} alt="FreshMarket Logo" className="h-10 w-10 rounded-full" />
-            <span className="text-xl font-bold text-gray-800">FreshMarket</span>
+            <img src={logoImg} alt="FreshMarket Logo" className="h-12 w-12 rounded-full" />
+            <span className="text-xl font-bold font-serif text-stone-800">FreshMarket</span>
           </Link>
-          <nav className="hidden md:flex items-center space-x-6">
-            <NavLink to="/" className={({isActive}) => isActive ? "text-green-600 font-bold" : "text-gray-600 hover:text-green-600"}>Accueil</NavLink>
-            <a href="/#products" className="text-gray-600 hover:text-green-600">Produits</a>
-            <a href="/#packs" className="text-gray-600 hover:text-green-600">Nos Packs</a>
-            <a href="#histoire" onClick={scrollToHistoire} className="text-gray-600 hover:text-green-600">Notre Histoire</a>
-            <a href="#contact" className="text-gray-600 hover:text-green-600">Contact</a>
-            <NavLink to="/admin" className="text-gray-600 hover:text-green-600">Admin</NavLink>
+          <nav className="hidden md:flex items-center space-x-8">
+            <NavLink to="/" className={({isActive}) => isActive ? "text-emerald-600 font-bold" : "text-gray-600 hover:text-emerald-600 transition-colors"}>Accueil</NavLink>
+            <NavLink to="/#products" className="text-gray-600 hover:text-emerald-600 transition-colors">Produits</NavLink>
+            <NavLink to="/#packs" className="text-gray-600 hover:text-emerald-600 transition-colors">Nos Packs</NavLink>
+            <a href="#histoire" onClick={scrollToHistoire} className="text-gray-600 hover:text-emerald-600 transition-colors">Notre Histoire</a>
+            <a href="#contact" className="text-gray-600 hover:text-emerald-600 transition-colors">Contact</a>
+            <NavLink to="/admin" className="text-gray-600 hover:text-emerald-600 transition-colors">Admin</NavLink>
           </nav>
           <div className="flex items-center space-x-4">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setIsCartOpen(true)}
-              className="relative"
+              className="relative hover:bg-emerald-50 rounded-full"
             >
-              <ShoppingCart className="w-6 h-6" />
+              <ShoppingCart className="w-6 h-6 text-stone-700" />
               {cart.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                   {cart.length}
                 </span>
               )}
@@ -434,9 +445,9 @@ function App() {
       </header>
 
       {/* Main Content */}
-      <main className="pt-20">
+      <main className="pt-20 bg-stone-50">
         {/* Hero Section */}
-        <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        <section className="relative h-[calc(100vh-88px)] flex items-center justify-center overflow-hidden">
           <motion.div
             initial={{ opacity: 0, scale: 1.1 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -448,7 +459,7 @@ function App() {
               alt="Fresh Food Background"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-black/40"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-black/10"></div>
           </motion.div>
           
           <motion.div
@@ -457,17 +468,17 @@ function App() {
             transition={{ delay: 0.5, duration: 0.8 }}
             className="relative z-10 text-center text-white px-4"
           >
-            <h1 className="text-5xl md:text-7xl font-bold mb-6">
+            <h1 className="text-5xl md:text-7xl font-serif font-bold mb-6 drop-shadow-lg">
               FreshMarket
             </h1>
-            <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">
-              Découvrez nos produits frais et nos délicieux desserts marocains traditionnels
+            <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto drop-shadow-md">
+              La fraîcheur de la nature, livrée à votre porte. Goûtez la différence.
             </p>
             <motion.a
               href="#products"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="inline-block bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
+              className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-10 py-4 rounded-full text-lg font-semibold transition-all shadow-lg hover:shadow-xl"
             >
               Découvrir nos Produits
             </motion.a>
@@ -475,7 +486,7 @@ function App() {
         </section>
 
         {/* Products Section */}
-        <section id="products" className="py-16 bg-gray-50">
+        <section id="products" className="py-24 bg-white">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -484,9 +495,9 @@ function App() {
               viewport={{ once: true }}
               className="text-center mb-12"
             >
-              <h2 className="text-4xl font-bold text-gray-800 mb-4">Nos Produits</h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                Des fruits et légumes frais, ainsi que des desserts marocains authentiques
+              <h2 className="text-4xl font-bold font-serif text-stone-800 mb-4">Nos Trésors Naturels</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Chaque produit est une promesse de fraîcheur et de qualité, directement du producteur à votre table.
               </p>
             </motion.div>
 
@@ -496,16 +507,20 @@ function App() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
-              className="flex flex-wrap justify-center gap-4 mb-8"
+              className="flex flex-wrap justify-center gap-3 mb-10"
             >
               {categories.map((category) => (
                 <Button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
                   variant={selectedCategory === category.id ? "default" : "outline"}
-                  className="flex items-center space-x-2"
+                  className={`rounded-full px-6 py-3 transition-all duration-300 ${
+                    selectedCategory === category.id 
+                      ? 'bg-emerald-600 text-white shadow-md hover:bg-emerald-700' 
+                      : 'bg-white border-stone-300 text-stone-700 hover:bg-stone-100 hover:border-emerald-500'
+                  }`}
                 >
-                  <span>{category.icon}</span>
+                  <span className="mr-2 text-lg">{category.icon}</span>
                   <span>{category.name}</span>
                 </Button>
               ))}
@@ -517,7 +532,7 @@ function App() {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.4 }}
               viewport={{ once: true }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
             >
               {products
                 .filter(product => selectedCategory === 'all' || product.category === selectedCategory)
@@ -529,27 +544,29 @@ function App() {
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     viewport={{ once: true }}
                   >
-                    <Card className="h-full hover:shadow-lg transition-shadow">
-                      <CardContent className="p-4">
-                        <div className="aspect-square mb-4 overflow-hidden rounded-lg">
+                    <Card className="h-full group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-200/80">
+                      <CardContent className="p-0">
+                        <div className="aspect-square mb-4 overflow-hidden">
                           <img
                             src={product.image}
                             alt={product.name}
-                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                         </div>
-                        <CardTitle className="text-lg mb-2">{product.name}</CardTitle>
-                        <CardDescription className="mb-3">{product.description}</CardDescription>
-                        <div className="flex items-center justify-between">
-                          <span className="text-xl font-bold text-green-600">{product.price} MAD</span>
-                          <Button
-                            onClick={() => addToCart(product)}
-                            size="sm"
-                            className="bg-green-600 hover:bg-green-700"
-                          >
-                            <Plus className="w-4 h-4 mr-1" />
-                            Ajouter
-                          </Button>
+                        <div className="p-5">
+                          <CardTitle className="text-lg font-serif mb-2 text-stone-800">{product.name}</CardTitle>
+                          <CardDescription className="mb-4 text-sm">{product.description}</CardDescription>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xl font-bold text-emerald-600">{product.price} MAD</span>
+                            <Button
+                              onClick={() => addToCart(product)}
+                              size="sm"
+                              className="bg-emerald-100 text-emerald-700 hover:bg-emerald-600 hover:text-white rounded-full transition-all"
+                            >
+                              <Plus className="w-4 h-4 mr-1" />
+                              Ajouter
+                            </Button>
+                          </div>
                         </div>
                       </CardContent>
                     </Card>
@@ -560,7 +577,7 @@ function App() {
         </section>
 
         {/* Packs Section */}
-        <section id="packs" className="py-16 bg-white">
+        <section id="packs" className="py-24 bg-stone-50">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -569,9 +586,9 @@ function App() {
               viewport={{ once: true }}
               className="text-center mb-12"
             >
-              <h2 className="text-4xl font-bold text-gray-800 mb-4">Nos Packs</h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                Des combinaisons parfaites de fruits et légumes pour tous vos besoins
+              <h2 className="text-4xl font-bold font-serif text-stone-800 mb-4">Nos Packs Composés</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Des combinaisons parfaites de fruits et légumes pour simplifier votre quotidien avec gourmandise.
               </p>
             </motion.div>
 
@@ -580,7 +597,7 @@ function App() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
             >
               {packs.map((pack, index) => (
                 <motion.div
@@ -588,24 +605,24 @@ function App() {
                   variants={packCardVariants}
                   className="relative"
                 >
-                  <Card className="h-full hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-green-200">
-                    <CardHeader className="text-center pb-4">
-                      <CardTitle className="text-xl text-green-600">{pack.name}</CardTitle>
+                  <Card className="h-full flex flex-col bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-200/80">
+                    <CardHeader className="text-center pb-4 pt-6">
+                      <CardTitle className="text-2xl font-serif text-emerald-700">{pack.name}</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-4">
+                    <CardContent className="space-y-4 flex-grow">
                       {/* Fruits */}
                       <div>
-                        <h4 className="font-semibold text-gray-700 mb-2 flex items-center">
+                        <h4 className="font-semibold text-stone-600 mb-3 flex items-center justify-center text-lg border-b pb-2">
                           <span className="mr-2">🍎</span> Fruits
                         </h4>
-                        <div className="space-y-1 text-sm">
+                        <div className="space-y-2 text-sm text-stone-700">
                           {pack.fruits.map((fruit, fruitIndex) => (
-                            <div key={fruitIndex} className="flex justify-between items-center">
+                            <div key={fruitIndex} className="flex justify-between items-center px-2">
                               <span className="flex items-center">
-                                <span className="mr-2">{fruit.emoji}</span>
+                                <span className="mr-2 text-xl">{fruit.emoji}</span>
                                 {fruit.label}
                               </span>
-                              <Badge variant="secondary" className="text-xs">
+                              <Badge variant="secondary" className="font-mono text-xs bg-stone-100 text-stone-800">
                                 {fruit.qty}
                               </Badge>
                             </div>
@@ -615,17 +632,17 @@ function App() {
 
                       {/* Légumes */}
                       <div>
-                        <h4 className="font-semibold text-gray-700 mb-2 flex items-center">
+                        <h4 className="font-semibold text-stone-600 mb-3 flex items-center justify-center text-lg border-b pb-2">
                           <span className="mr-2">🥕</span> Légumes
                         </h4>
-                        <div className="space-y-1 text-sm">
+                        <div className="space-y-2 text-sm text-stone-700">
                           {pack.legumes.map((legume, legumeIndex) => (
-                            <div key={legumeIndex} className="flex justify-between items-center">
+                            <div key={legumeIndex} className="flex justify-between items-center px-2">
                               <span className="flex items-center">
-                                <span className="mr-2">{legume.emoji}</span>
+                                <span className="mr-2 text-xl">{legume.emoji}</span>
                                 {legume.label}
                               </span>
-                              <Badge variant="secondary" className="text-xs">
+                              <Badge variant="secondary" className="font-mono text-xs bg-stone-100 text-stone-800">
                                 {legume.qty}
                               </Badge>
                             </div>
@@ -634,14 +651,14 @@ function App() {
                       </div>
 
                       {/* Highlight */}
-                      <div className="pt-4 border-t">
-                        <p className="text-xs text-green-600 font-semibold text-center">
+                      <div className="pt-4 mt-auto">
+                        <p className="text-xs text-emerald-700 font-semibold text-center bg-emerald-50 py-2 rounded-lg">
                           {pack.highlight}
                         </p>
                       </div>
                     </CardContent>
-                    <CardFooter className="pt-0">
-                      <Button className="w-full bg-green-600 hover:bg-green-700">
+                    <CardFooter className="p-4">
+                      <Button className="w-full bg-emerald-600 hover:bg-emerald-700 rounded-full py-3">
                         Commander ce Pack
                       </Button>
                     </CardFooter>
@@ -653,7 +670,7 @@ function App() {
         </section>
 
         {/* Histoire Section */}
-        <section id="histoire" ref={histoireRef} className="py-16 bg-gray-50">
+        <section id="histoire" ref={histoireRef} className="py-24 bg-white">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <motion.div
@@ -665,7 +682,7 @@ function App() {
                 <img
                   src={histoireImg}
                   alt="Notre Histoire"
-                  className="w-full h-96 object-cover rounded-lg shadow-lg"
+                  className="w-full h-auto max-h-[500px] object-cover rounded-2xl shadow-xl"
                 />
               </motion.div>
               <motion.div
@@ -674,20 +691,20 @@ function App() {
                 transition={{ duration: 0.8, delay: 0.2 }}
                 viewport={{ once: true }}
               >
-                <h2 className="text-4xl font-bold text-gray-800 mb-6">Notre Histoire</h2>
-                <p className="text-lg text-gray-600 mb-6">
+                <h2 className="text-4xl font-bold font-serif text-stone-800 mb-6">Notre Histoire</h2>
+                <p className="text-lg text-gray-600 mb-6 leading-relaxed">
                   Depuis plus de 20 ans, FreshMarket s'engage à vous offrir les meilleurs produits frais et les desserts marocains les plus authentiques. Notre passion pour la qualité et le service client nous pousse à sélectionner avec soin chaque produit.
                 </p>
-                <p className="text-lg text-gray-600 mb-6">
+                <p className="text-lg text-gray-600 mb-6 leading-relaxed">
                   Nous travaillons directement avec les producteurs locaux pour garantir la fraîcheur et la qualité de nos fruits et légumes. Nos desserts sont préparés selon les recettes traditionnelles marocaines, transmises de génération en génération.
                 </p>
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-6 mt-8">
                   <div className="flex items-center">
-                    <Star className="w-5 h-5 text-yellow-400 mr-1" />
-                    <span className="font-semibold">4.9/5</span>
+                    <Star className="w-6 h-6 text-yellow-400 mr-2" />
+                    <span className="font-semibold text-lg">4.9/5</span>
                   </div>
-                  <div className="flex items-center">
-                    <span className="text-gray-600">+1000 clients satisfaits</span>
+                  <div className="flex items-center text-gray-600 text-lg">
+                    <span>+1000 clients satisfaits</span>
                   </div>
                 </div>
               </motion.div>
@@ -696,18 +713,18 @@ function App() {
         </section>
 
         {/* Contact Section */}
-        <section id="contact" className="py-16 bg-white">
+        <section id="contact" className="py-24 bg-stone-50">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="text-center mb-12"
+              className="text-center mb-16"
             >
-              <h2 className="text-4xl font-bold text-gray-800 mb-4">Contactez-nous</h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                Nous sommes là pour vous aider et répondre à toutes vos questions
+              <h2 className="text-4xl font-bold font-serif text-stone-800 mb-4">Contactez-nous</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Une question ? Une envie particulière ? Nous sommes là pour vous.
               </p>
             </motion.div>
 
@@ -717,13 +734,13 @@ function App() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
                 viewport={{ once: true }}
-                className="text-center"
+                className="text-center bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-shadow"
               >
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Phone className="w-8 h-8 text-green-600" />
+                <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Phone className="w-10 h-10 text-emerald-600" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Téléphone</h3>
-                <p className="text-gray-600">+212 6 00 00 00 00</p>
+                <h3 className="text-2xl font-serif font-semibold mb-2 text-stone-800">Téléphone</h3>
+                <p className="text-gray-600 text-lg">+212 6 00 00 00 00</p>
               </motion.div>
 
               <motion.div
@@ -731,13 +748,13 @@ function App() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
                 viewport={{ once: true }}
-                className="text-center"
+                className="text-center bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-shadow"
               >
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MapPin className="w-8 h-8 text-green-600" />
+                <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <MapPin className="w-10 h-10 text-emerald-600" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Adresse</h3>
-                <p className="text-gray-600">Casablanca, Maroc</p>
+                <h3 className="text-2xl font-serif font-semibold mb-2 text-stone-800">Adresse</h3>
+                <p className="text-gray-600 text-lg">Casablanca, Maroc</p>
               </motion.div>
 
               <motion.div
@@ -745,13 +762,13 @@ function App() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
                 viewport={{ once: true }}
-                className="text-center"
+                className="text-center bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-shadow"
               >
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MessageCircle className="w-8 h-8 text-green-600" />
+                <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <MessageCircle className="w-10 h-10 text-emerald-600" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">WhatsApp</h3>
-                <p className="text-gray-600">Commande en ligne</p>
+                <h3 className="text-2xl font-serif font-semibold mb-2 text-stone-800">WhatsApp</h3>
+                <p className="text-gray-600 text-lg">Commande en ligne</p>
               </motion.div>
             </div>
           </div>
@@ -774,17 +791,18 @@ function App() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl z-50 overflow-y-auto"
+              className="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl z-50 flex flex-col"
             >
-              <div className="p-6">
+              <div className="p-6 flex-shrink-0">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-bold">Mon Panier</h3>
+                  <h3 className="text-2xl font-serif font-bold text-stone-800">Mon Panier</h3>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => setIsCartOpen(false)}
+                    className="rounded-full hover:bg-stone-100"
                   >
-                    <X className="w-5 h-5" />
+                    <X className="w-5 h-5 text-stone-600" />
                   </Button>
                 </div>
 
@@ -795,39 +813,42 @@ function App() {
                   </div>
                 ) : (
                   <>
-                    <div className="space-y-4 mb-6">
+                    <div className="space-y-4 mb-6 flex-grow overflow-y-auto px-1">
                       {cart.map((item) => (
-                        <div key={item.id} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                        <div key={item.id} className="flex items-center space-x-4 p-3 bg-stone-50 rounded-lg">
                           <img
                             src={item.image}
                             alt={item.name}
-                            className="w-12 h-12 object-cover rounded"
+                            className="w-16 h-16 object-cover rounded-md"
                           />
                           <div className="flex-1">
-                            <h4 className="font-medium text-sm">{item.name}</h4>
-                            <p className="text-xs text-gray-500">{item.price} MAD/{item.unit}</p>
+                            <h4 className="font-medium text-stone-800">{item.name}</h4>
+                            <p className="text-sm text-gray-500">{item.price} MAD/{item.unit}</p>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Button
-                              size="sm"
+                              size="icon"
                               variant="outline"
                               onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                              className="w-8 h-8 rounded-full"
                             >
-                              <Minus className="w-3 h-3" />
+                              <Minus className="w-4 h-4" />
                             </Button>
-                            <span className="w-8 text-center text-sm">{item.quantity}</span>
+                            <span className="w-8 text-center text-md font-semibold">{item.quantity}</span>
                             <Button
-                              size="sm"
+                              size="icon"
                               variant="outline"
                               onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                              className="w-8 h-8 rounded-full"
                             >
-                              <Plus className="w-3 h-3" />
+                              <Plus className="w-4 h-4" />
                             </Button>
                           </div>
                           <Button
-                            size="sm"
+                            size="icon"
                             variant="ghost"
                             onClick={() => removeFromCart(item.id)}
+                            className="text-stone-500 hover:text-red-500 hover:bg-red-100 rounded-full w-8 h-8"
                           >
                             <X className="w-4 h-4" />
                           </Button>
@@ -835,16 +856,16 @@ function App() {
                       ))}
                     </div>
 
-                    <div className="border-t pt-4">
+                    <div className="border-t pt-6 mt-auto flex-shrink-0">
                       <div className="flex justify-between items-center mb-4">
-                        <span className="text-lg font-bold">Total:</span>
-                        <span className="text-xl font-bold text-green-600">{total} MAD</span>
+                        <span className="text-lg font-bold text-stone-800">Total:</span>
+                        <span className="text-2xl font-bold text-emerald-600">{total} MAD</span>
                       </div>
                       <Button
                         onClick={openOrderForm}
-                        className="w-full bg-green-600 hover:bg-green-700"
+                        className="w-full bg-emerald-600 hover:bg-emerald-700 text-lg py-6 rounded-lg"
                       >
-                        <MessageCircle className="w-4 h-4 mr-2" />
+                        <MessageCircle className="w-5 h-5 mr-2" />
                         Commander via WhatsApp
                       </Button>
                     </div>
@@ -888,7 +909,7 @@ function App() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 40, scale: 0.95 }}
             transition={{ duration: 0.35, type: 'spring', stiffness: 80 }}
-            className="fixed right-6 bottom-[88px] z-50 w-80"
+            className="fixed right-6 bottom-[88px] z-50 w-full"
             style={{ minWidth: 320, maxWidth: 384 }}
           >
             <ChatBot
@@ -904,38 +925,38 @@ function App() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.7, type: 'spring', stiffness: 60 }}
-        className="bg-gray-800 text-white py-12"
+        className="bg-stone-900 text-white py-12"
       >
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
             <div>
-              <h3 className="text-xl font-bold mb-4">FreshMarket</h3>
-              <p className="text-gray-300">
+              <h3 className="text-2xl font-serif font-bold mb-4">FreshMarket</h3>
+              <p className="text-stone-300">
                 Votre source de confiance pour des produits frais et des desserts marocains authentiques.
               </p>
             </div>
             <div>
-              <h4 className="font-bold mb-4">Contact</h4>
-              <div className="space-y-2 text-gray-300">
-                <div className="flex items-center">
+              <h4 className="font-bold mb-4 text-lg">Contact</h4>
+              <div className="space-y-2 text-stone-300">
+                <div className="flex items-center justify-center md:justify-start">
                   <Phone className="w-4 h-4 mr-2" />
                   <span>+212 6 00 00 00 00</span>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center justify-center md:justify-start">
                   <MapPin className="w-4 h-4 mr-2" />
                   <span>Casablanca, Maroc</span>
                 </div>
               </div>
             </div>
             <div>
-              <h4 className="font-bold mb-4">Horaires</h4>
-              <div className="text-gray-300">
+              <h4 className="font-bold mb-4 text-lg">Horaires</h4>
+              <div className="text-stone-300">
                 <p>Lun - Sam: 8h00 - 20h00</p>
                 <p>Dimanche: 9h00 - 18h00</p>
               </div>
             </div>
           </div>
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+          <div className="border-t border-stone-700 mt-8 pt-8 text-center text-stone-400">
             <p>&copy; 2024 FreshMarket. Tous droits réservés.</p>
           </div>
         </div>
@@ -956,6 +977,7 @@ function App() {
 function Root() {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         <Route path="/*" element={<App />} />
         <Route path="/admin" element={<AdminLayout />}>
@@ -967,6 +989,16 @@ function Root() {
     </Router>
   )
 }
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
 
 export default Root
 
