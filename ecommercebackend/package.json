@@ -1,0 +1,35 @@
+{
+  "name": "ecommerce-backend",
+  "version": "1.0.0",
+  "description": "Backend e-commerce avec Node.js et MySQL (Architecture MVC)",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "drop-tables": "node scripts/drop-tables.js",
+    "setup-db": "node scripts/setup-database.js",
+    "reset-db": "npm run drop-tables && npm run setup-db",
+    "migrate": "node scripts/setup-database.js",
+    "seed": "node scripts/setup-database.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ecommerce",
+    "nodejs",
+    "mysql",
+    "express",
+    "mvc"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^4.18.2",
+    "mysql2": "^3.9.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
