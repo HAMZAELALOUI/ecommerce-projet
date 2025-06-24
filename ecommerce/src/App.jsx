@@ -30,90 +30,13 @@ import AdminLayout from './components/admin/AdminLayout.jsx'
 import Dashboard from './pages/admin/Dashboard.jsx'
 import ProductsAdmin from './pages/admin/ProductsAdmin.jsx'
 import CategoriesAdmin from './pages/admin/CategoriesAdmin.jsx'
+import { fetchProducts, fetchCategories } from './services/apiService.js'
 
-// Données des produits
-const products = [
-  // Fruits
-  {
-    id: 1,
-    name: 'Pommes Rouges',
-    category: 'fruits',
-    price: 25,
-    image: '/src/assets/pommerouge.jpeg',
-    description: 'Pommes rouges fraîches et croquantes',
-    unit: 'kg'
-  },
-  {
-    id: 2,
-    name: 'Bananes',
-    category: 'fruits',
-    price: 18,
-    image: '/src/assets/banane.jpeg',
-    description: 'Bananes mûres et sucrées',
-    unit: 'kg'
-  },
-  {
-    id: 3,
-    name: 'Oranges',
-    category: 'fruits',
-    price: 22,
-    image: '/src/assets/oranges.jpeg',
-    description: 'Oranges juteuses riches en vitamine C',
-    unit: 'kg'
-  },
-  {
-    id: 4,
-    name: 'Fraises',
-    category: 'fruits',
-    price: 35,
-    image: '/src/assets/fraise.jpeg',
-    description: 'Fraises fraîches de saison',
-    unit: 'kg'
-  },
-  // Légumes
-  {
-    id: 5,
-    name: 'Tomates',
-    category: 'vegetables',
-    price: 15,
-    image: '/src/assets/tomates.jpg',
-    description: 'Tomates fraîches et savoureuses',
-    unit: 'kg'
-  },
-  {
-    id: 6,
-    name: 'Carottes',
-    category: 'vegetables',
-    price: 12,
-    image: '/src/assets/Carrote.jpeg',
-    description: 'Carottes croquantes et nutritives',
-    unit: 'kg'
-  },
-  {
-    id: 7,
-    name: 'Courgettes',
-    category: 'vegetables',
-    price: 20,
-    image: '/src/assets/Courgettes.jpeg',
-    description: 'Courgettes tendres et fraîches',
-    unit: 'kg'
-  },
-  {
-    id: 8,
-    name: 'Poivrons',
-    category: 'vegetables',
-    price: 28,
-    image: '/src/assets/Poivrons.jpeg',
-    description: 'Poivrons colorés et croquants',
-    unit: 'kg'
-  }
-];
+// Données des produits - SERONT REMPLACÉES PAR L'API
+// const products = [ ... ];
 
-const categories = [
-  { id: 'all', name: 'Tous les Produits', icon: '🛒' },
-  { id: 'fruits', name: 'Fruits Frais', icon: '🍎' },
-  { id: 'vegetables', name: 'Légumes', icon: '🥕' },
-]
+// Données des catégories - SERONT REMPLACÉES PAR L'API
+// const categories = [ ... ];
 
 const packs = [
   {
@@ -197,6 +120,14 @@ const packCardVariants = {
   hidden: { opacity: 0, y: 40, scale: 0.95 },
   show: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring', stiffness: 60, damping: 18 } },
 }
+
+const categoryIcons = {
+  'Fruits': '🍎',
+  'Légumes': '🥕',
+  'Desserts Marocains': '🍰',
+  'Poissons': '🐟',
+  'Viandes': '🥩',
+};
 
 function PacksPage() {
   return (
@@ -330,6 +261,8 @@ function ProductsPage() {
 }
 
 function App() {
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [cart, setCart] = useState([])
   const [isCartOpen, setIsCartOpen] = useState(false)
@@ -338,10 +271,39 @@ function App() {
   const [isChatOpen, setIsChatOpen] = useState(false)
   const histoireRef = useRef(null)
 
+  const API_BASE_URL = 'http://localhost:8000';
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const productsRes = await fetchProducts();
+        const productsData = productsRes.data.data.map(p => ({
+          ...p,
+          image: `${API_BASE_URL}${p.image_url}`
+        }));
+        setProducts(productsData);
+
+        const categoriesRes = await fetchCategories();
+        const fetchedCategories = categoriesRes.data.data.map(cat => ({
+          ...cat,
+          icon: categoryIcons[cat.name] || '📦'
+        }));
+        
+        const allCategory = { id: 'all', name: 'Tous les Produits', icon: '🛒' };
+        setCategories([allCategory, ...fetchedCategories]);
+
+      } catch (error) {
+        console.error("Erreur lors du chargement des données depuis l'API:", error);
+      }
+    };
+
+    loadData();
+  }, []);
+
   // Filtrer les produits par catégorie
   const filteredProducts = selectedCategory === 'all' 
     ? products 
-    : products.filter(product => product.category === selectedCategory)
+    : products.filter(product => product.category_id === selectedCategory)
 
   // Ajouter au panier
   const addToCart = (product) => {
@@ -535,7 +497,7 @@ function App() {
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
             >
               {products
-                .filter(product => selectedCategory === 'all' || product.category === selectedCategory)
+                .filter(product => selectedCategory === 'all' || product.category_id === selectedCategory)
                 .map((product, index) => (
                   <motion.div
                     key={product.id}
@@ -743,19 +705,6 @@ function App() {
                 <p className="text-gray-600 text-lg">+212 6 00 00 00 00</p>
               </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                viewport={{ once: true }}
-                className="text-center bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-shadow"
-              >
-                <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <MapPin className="w-10 h-10 text-emerald-600" />
-                </div>
-                <h3 className="text-2xl font-serif font-semibold mb-2 text-stone-800">Adresse</h3>
-                <p className="text-gray-600 text-lg">Casablanca, Maroc</p>
-              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
