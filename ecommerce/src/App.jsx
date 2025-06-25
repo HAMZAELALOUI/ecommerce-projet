@@ -247,7 +247,7 @@ function ProductsPage() {
               whileHover={{ y: -5 }}
               transition={{ duration: 0.3 }}
             >
-              <Card className="h-full hover:shadow-xl transition-shadow">
+              <Card className="h-full group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-200/80 bg-white/60 backdrop-blur-md">
                 <CardHeader className="p-0">
                   <div className="relative overflow-hidden rounded-t-lg">
                     <img
@@ -294,6 +294,7 @@ function App() {
   const [isOrderFormOpen, setIsOrderFormOpen] = useState(false)
   const [isChatOpen, setIsChatOpen] = useState(false)
   const histoireRef = useRef(null)
+  const [productTypeFilter, setProductTypeFilter] = useState('all'); // 'all', 'fruits', 'legumes'
 
   const API_BASE_URL = 'http://localhost:8000';
 
@@ -324,10 +325,27 @@ function App() {
     loadData();
   }, []);
 
-  // Filtrer les produits par catégorie
-  const filteredProducts = selectedCategory === 'all' 
-    ? products 
-    : products.filter(product => product.category_id === selectedCategory)
+  // Fonction pour déterminer si un produit est un fruit ou un légume
+  const isFruit = (name) => {
+    const n = name.toLowerCase();
+    return (
+      n.includes('banane') || n.includes('fraise') || n.includes('pomme') || n.includes('orange') || n.includes('fruit')
+    );
+  };
+  const isLegume = (name) => {
+    const n = name.toLowerCase();
+    return (
+      n.includes('carotte') || n.includes('courgette') || n.includes('poivron') || n.includes('tomate') || n.includes('légume') || n.includes('legume')
+    );
+  };
+
+  // Filtrage combiné
+  const filteredProducts = products.filter(product => {
+    if (selectedCategory !== 'all' && product.category_id !== selectedCategory) return false;
+    if (productTypeFilter === 'fruits') return isFruit(product.name);
+    if (productTypeFilter === 'legumes') return isLegume(product.name);
+    return true;
+  });
 
   // Ajouter au panier
   const addToCart = (product) => {
@@ -549,36 +567,43 @@ function App() {
               viewport={{ once: true }}
               className="text-center mb-12"
             >
-              <h2 className="text-4xl font-bold font-serif text-stone-800 mb-4">Nos Trésors Naturels</h2>
+              <motion.h2
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, type: 'spring', stiffness: 60 }}
+                className="text-4xl md:text-5xl font-serif font-extrabold text-orange-600 mb-10 text-center tracking-tight drop-shadow-lg"
+              >
+                Nos Trésors Naturels
+              </motion.h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                 Chaque produit est une promesse de fraîcheur et de qualité, directement du producteur à votre table.
               </p>
             </motion.div>
 
             {/* Category Filter */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="flex flex-wrap justify-center gap-3 mb-10"
-            >
-              {categories.map((category) => (
-                <Button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  variant={selectedCategory === category.id ? "default" : "outline"}
-                  className={`rounded-full px-6 py-3 transition-all duration-300 ${
-                    selectedCategory === category.id 
-                      ? 'bg-emerald-600 text-white shadow-md hover:bg-emerald-700' 
-                      : 'bg-white border-stone-300 text-stone-700 hover:bg-stone-100 hover:border-emerald-500'
-                  }`}
-                >
-                  <span className="mr-2 text-lg">{category.icon}</span>
-                  <span>{category.name}</span>
-                </Button>
-              ))}
-            </motion.div>
+            <div className="flex flex-wrap justify-center gap-3 mb-10">
+              <Button
+                onClick={() => setProductTypeFilter('all')}
+                variant={productTypeFilter === 'all' ? 'default' : 'outline'}
+                className={productTypeFilter === 'all' ? 'bg-emerald-600 text-white shadow-md' : 'bg-white border-stone-300 text-stone-700 hover:bg-stone-100 hover:border-emerald-500'}
+              >
+                Tous les Produits
+              </Button>
+              <Button
+                onClick={() => setProductTypeFilter('fruits')}
+                variant={productTypeFilter === 'fruits' ? 'default' : 'outline'}
+                className={productTypeFilter === 'fruits' ? 'bg-orange-500 text-white shadow-md' : 'bg-white border-stone-300 text-stone-700 hover:bg-stone-100 hover:border-orange-400'}
+              >
+                <span className="mr-2">🍎</span> Fruits
+              </Button>
+              <Button
+                onClick={() => setProductTypeFilter('legumes')}
+                variant={productTypeFilter === 'legumes' ? 'default' : 'outline'}
+                className={productTypeFilter === 'legumes' ? 'bg-green-600 text-white shadow-md' : 'bg-white border-stone-300 text-stone-700 hover:bg-stone-100 hover:border-green-400'}
+              >
+                <span className="mr-2">🥕</span> Légumes
+              </Button>
+            </div>
 
             {/* Products Grid */}
             <motion.div
@@ -588,42 +613,51 @@ function App() {
               viewport={{ once: true }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
             >
-              {products
-                .filter(product => selectedCategory === 'all' || product.category_id === selectedCategory)
+              {filteredProducts
                 .map((product, index) => (
                   <motion.div
                     key={product.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    viewport={{ once: true }}
+                    initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ duration: 0.5, delay: index * 0.08, type: 'spring', stiffness: 60 }}
+                    whileHover={{ scale: 1.04, boxShadow: '0 8px 32px rgba(16, 185, 129, 0.12)' }}
+                    className="h-full group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-200/80 bg-white/60 backdrop-blur-md"
                   >
-                    <Card className="h-full group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-200/80">
-                      <CardContent className="p-0">
-                        <div className="aspect-square mb-4 overflow-hidden">
-                          <img
-                            src={getProductImage(product.name)}
-                            alt={product.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
-                        </div>
-                        <div className="p-5">
-                          <CardTitle className="text-lg font-serif mb-2 text-stone-800">{product.name}</CardTitle>
-                          <CardDescription className="mb-4 text-sm">{product.description}</CardDescription>
-                          <div className="flex items-center justify-between">
-                            <span className="text-xl font-bold text-emerald-600">{product.price} MAD</span>
-                            <Button
-                              onClick={() => addToCart(product)}
-                              size="sm"
-                              className="bg-emerald-100 text-emerald-700 hover:bg-emerald-600 hover:text-white rounded-full transition-all"
-                            >
-                              <Plus className="w-4 h-4 mr-1" />
-                              Ajouter
-                            </Button>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+                    <CardHeader className="p-0">
+                      <motion.div
+                        className="relative overflow-hidden rounded-t-lg"
+                        whileHover={{ scale: 1.06 }}
+                        transition={{ type: 'spring', stiffness: 80 }}
+                      >
+                        <motion.img
+                          src={getProductImage(product.name)}
+                          alt={product.name}
+                          className="w-full h-48 object-cover transition-transform"
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: 0.7, delay: index * 0.08 }}
+                          whileHover={{ scale: 1.12 }}
+                        />
+                        <Badge className="absolute top-2 right-2 bg-green-600">
+                          {product.price} MAD/{product.unit}
+                        </Badge>
+                      </motion.div>
+                    </CardHeader>
+                    <CardContent className="p-5">
+                      <CardTitle className="text-lg font-serif mb-2 text-stone-800">{product.name}</CardTitle>
+                      <CardDescription className="mb-4 text-sm">{product.description}</CardDescription>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xl font-bold text-emerald-600">{product.price} MAD</span>
+                        <Button
+                          onClick={() => addToCart(product)}
+                          size="sm"
+                          className="bg-emerald-100 text-emerald-700 hover:bg-emerald-600 hover:text-white rounded-full transition-all"
+                        >
+                          <Plus className="w-4 h-4 mr-1" />
+                          Ajouter
+                        </Button>
+                      </div>
+                    </CardContent>
                   </motion.div>
                 ))}
             </motion.div>
@@ -655,13 +689,22 @@ function App() {
             >
               {packs.map((pack, index) => (
                 <motion.div
-                  key={index}
-                  variants={packCardVariants}
+                  key={pack.name}
+                  initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.6, delay: index * 0.12, type: 'spring', stiffness: 60 }}
+                  whileHover={{ scale: 1.03, boxShadow: '0 8px 32px rgba(251, 191, 36, 0.13)' }}
                   className="relative"
                 >
                   <Card className="h-full flex flex-col bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-200/80">
                     <CardHeader className="text-center pb-4 pt-6">
-                      <CardTitle className="text-2xl font-serif text-emerald-700">{pack.name}</CardTitle>
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.7, delay: index * 0.12 }}
+                      >
+                        <CardTitle className="text-2xl font-serif text-emerald-700">{pack.name}</CardTitle>
+                      </motion.div>
                     </CardHeader>
                     <CardContent className="space-y-4 flex-grow">
                       {/* Fruits */}
@@ -745,7 +788,7 @@ function App() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl z-50 flex flex-col"
+              className="fixed right-0 top-0 h-full w-full max-w-md bg-white/60 backdrop-blur-md shadow-2xl z-50 flex flex-col"
             >
               <div className="p-6 flex-shrink-0">
                 <div className="flex items-center justify-between mb-6">
@@ -769,12 +812,19 @@ function App() {
                   <>
                     <div className="space-y-4 mb-6 flex-grow overflow-y-auto px-1">
                       {cart.map((item) => (
-                        <div key={item.id} className="flex items-center space-x-4 p-3 bg-stone-50 rounded-lg">
-                          <img
-                            src={getProductImage(item.name)}
-                            alt={item.name}
-                            className="w-16 h-16 object-cover rounded-md"
-                          />
+                        <div key={item.id} className="flex items-center space-x-4 p-3 bg-white/40 backdrop-blur rounded-lg">
+                          <div className="flex space-x-2">
+                            <img
+                              src={getProductImage(item.name)}
+                              alt={item.name}
+                              className="w-14 h-14 object-cover rounded-md"
+                            />
+                            <img
+                              src={getProductImage(item.name)}
+                              alt={item.name + ' 2'}
+                              className="w-14 h-14 object-cover rounded-md"
+                            />
+                          </div>
                           <div className="flex-1">
                             <h4 className="font-medium text-stone-800">{item.name}</h4>
                             <p className="text-sm text-gray-500">{item.price} MAD/{item.unit}</p>
@@ -817,7 +867,7 @@ function App() {
                       </div>
                       <Button
                         onClick={openOrderForm}
-                        className="w-full bg-emerald-600 hover:bg-emerald-700 text-lg py-6 rounded-lg"
+                        className="w-full bg-emerald-600/80 hover:bg-emerald-700/80 text-lg py-6 rounded-lg backdrop-blur-md"
                       >
                         <MessageCircle className="w-5 h-5 mr-2" />
                         Commander via WhatsApp
