@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+const path = require('path');
 
 // Import de la connexion à la base de données
 require('./config/db');
@@ -15,6 +16,9 @@ const PORT = process.env.PORT || 8000;
 // Middleware pour parser le JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Servir les fichiers statiques depuis le dossier `public`
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Configuration CORS
 app.use(cors({
