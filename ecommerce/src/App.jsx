@@ -31,6 +31,7 @@ import Dashboard from './pages/admin/Dashboard.jsx'
 import ProductsAdmin from './pages/admin/ProductsAdmin.jsx'
 import CategoriesAdmin from './pages/admin/CategoriesAdmin.jsx'
 import { fetchProducts, fetchCategories } from './services/apiService.js'
+import { toast } from 'sonner'
 
 // Données des produits - SERONT REMPLACÉES PAR L'API
 // const products = [ ... ];
@@ -41,6 +42,7 @@ import { fetchProducts, fetchCategories } from './services/apiService.js'
 const packs = [
   {
     name: "Pack Essentiel",
+    price: 129,
     fruits: [
       { label: "Citron", qty: "0.5 KG", emoji: "🍋" },
       { label: "Orange", qty: "1 KG", emoji: "🍊" },
@@ -57,6 +59,7 @@ const packs = [
   },
   {
     name: "Pack Famille",
+    price: 179,
     fruits: [
       { label: "Citron", qty: "0.5 KG", emoji: "🍋" },
       { label: "Orange", qty: "1 KG", emoji: "🍊" },
@@ -73,6 +76,7 @@ const packs = [
   },
   {
     name: "Pack Prestige",
+    price: 239,
     fruits: [
       { label: "Citron", qty: "0.5 KG", emoji: "🍋" },
       { label: "Orange", qty: "1 KG", emoji: "🍊" },
@@ -91,6 +95,7 @@ const packs = [
   },
   {
     name: "Pack Vitalité",
+    price: 149,
     fruits: [
       { label: "Citron", qty: "1 KG", emoji: "🍋" },
       { label: "Orange", qty: "2 KG", emoji: "🍊" },
@@ -390,6 +395,31 @@ function App() {
     }
   }
 
+  // Ajouter un pack au panier
+  const addPackToCart = (pack) => {
+    const packCartItem = {
+      id: `pack-${pack.name}`,
+      name: pack.name,
+      price: pack.price,
+      unit: 'pack',
+      quantity: 1,
+      isPack: true,
+      details: pack,
+    };
+    setCart(prevCart => {
+      const existing = prevCart.find(item => item.id === packCartItem.id);
+      if (existing) {
+        return prevCart.map(item =>
+          item.id === packCartItem.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [...prevCart, packCartItem];
+    });
+    toast.success(`${pack.name} ajouté au panier !`);
+  };
+
   return (
     <motion.div className="min-h-screen bg-white">
       {/* Header */}
@@ -682,7 +712,10 @@ function App() {
                       </div>
                     </CardContent>
                     <CardFooter className="p-4">
-                      <Button className="w-full bg-emerald-600 hover:bg-emerald-700 rounded-full py-3">
+                      <Button
+                        className="w-full bg-green-600 hover:bg-green-700 rounded-full py-3 text-lg font-bold shadow-lg transition-all mt-4"
+                        onClick={() => addPackToCart(pack)}
+                      >
                         Commander ce Pack
                       </Button>
                     </CardFooter>
