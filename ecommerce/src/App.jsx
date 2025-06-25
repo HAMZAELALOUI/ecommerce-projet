@@ -129,6 +129,25 @@ const categoryIcons = {
   'Viandes': '🥩',
 };
 
+// Fonction utilitaire pour associer un nom de produit à une image locale
+const getProductImage = (productName) => {
+  const name = productName.toLowerCase();
+  if (name.includes('banane')) return bananeImg;
+  if (name.includes('carotte')) return carotteImg;
+  if (name.includes('courgette')) return courgettesImg;
+  if (name.includes('fraise')) return fraiseImg;
+  if (name.includes('pomme')) return pommerougeImg;
+  if (name.includes('orange')) return orangesImg;
+  if (name.includes('poivron')) return poivronsImg;
+  if (name.includes('tomate')) return tomatesImg;
+  if (name.includes('makroudh')) return makroudhImg;
+  if (name.includes('cornes')) return cornesDeGazelleImg;
+  if (name.includes('dessert')) return dessertsImg;
+  if (name.includes('légume') || name.includes('legume')) return vegetablesImg;
+  if (name.includes('fruit')) return fruitsImg;
+  return foodImg;
+};
+
 function PacksPage() {
   return (
     <motion.section
@@ -227,7 +246,7 @@ function ProductsPage() {
                 <CardHeader className="p-0">
                   <div className="relative overflow-hidden rounded-t-lg">
                     <img
-                      src={product.image}
+                      src={getProductImage(product.name)}
                       alt={product.name}
                       className="w-full h-48 object-cover transition-transform hover:scale-110"
                     />
@@ -382,10 +401,10 @@ function App() {
           </Link>
           <nav className="hidden md:flex items-center space-x-8">
             <NavLink to="/" className={({isActive}) => isActive ? "text-emerald-600 font-bold" : "text-gray-600 hover:text-emerald-600 transition-colors"}>Accueil</NavLink>
+            
+            <a href="#histoire" onClick={scrollToHistoire} className="text-gray-600 hover:text-emerald-600 transition-colors">Notre Histoire</a>
             <NavLink to="/#products" className="text-gray-600 hover:text-emerald-600 transition-colors">Produits</NavLink>
             <NavLink to="/#packs" className="text-gray-600 hover:text-emerald-600 transition-colors">Nos Packs</NavLink>
-            <a href="#histoire" onClick={scrollToHistoire} className="text-gray-600 hover:text-emerald-600 transition-colors">Notre Histoire</a>
-            <a href="#contact" className="text-gray-600 hover:text-emerald-600 transition-colors">Contact</a>
             <NavLink to="/admin" className="text-gray-600 hover:text-emerald-600 transition-colors">Admin</NavLink>
           </nav>
           <div className="flex items-center space-x-4">
@@ -445,7 +464,50 @@ function App() {
               Découvrir nos Produits
             </motion.a>
           </motion.div>
+        </section>  {/* Histoire Section */}
+        <section id="histoire" ref={histoireRef} className="py-24 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+              >
+                <img
+                  src={histoireImg}
+                  alt="Notre Histoire"
+                  className="w-full h-auto max-h-[500px] object-cover rounded-2xl shadow-xl"
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                viewport={{ once: true }}
+              >
+                <h2 className="text-4xl font-bold font-serif text-stone-800 mb-6">Notre Histoire</h2>
+                <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                  Depuis plus de 20 ans, FreshMarket s'engage à vous offrir les meilleurs produits frais et les desserts marocains les plus authentiques. Notre passion pour la qualité et le service client nous pousse à sélectionner avec soin chaque produit.
+                </p>
+                <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                  Nous travaillons directement avec les producteurs locaux pour garantir la fraîcheur et la qualité de nos fruits et légumes. Nos desserts sont préparés selon les recettes traditionnelles marocaines, transmises de génération en génération.
+                </p>
+                <div className="flex items-center space-x-6 mt-8">
+                  <div className="flex items-center">
+                    <Star className="w-6 h-6 text-yellow-400 mr-2" />
+                    <span className="font-semibold text-lg">4.9/5</span>
+                  </div>
+                  <div className="flex items-center text-gray-600 text-lg">
+                    <span>+1000 clients satisfaits</span>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
         </section>
+
+    
 
         {/* Products Section */}
         <section id="products" className="py-24 bg-white">
@@ -510,7 +572,7 @@ function App() {
                       <CardContent className="p-0">
                         <div className="aspect-square mb-4 overflow-hidden">
                           <img
-                            src={product.image}
+                            src={getProductImage(product.name)}
                             alt={product.name}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
@@ -631,97 +693,7 @@ function App() {
           </div>
         </section>
 
-        {/* Histoire Section */}
-        <section id="histoire" ref={histoireRef} className="py-24 bg-white">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-                viewport={{ once: true }}
-              >
-                <img
-                  src={histoireImg}
-                  alt="Notre Histoire"
-                  className="w-full h-auto max-h-[500px] object-cover rounded-2xl shadow-xl"
-                />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                viewport={{ once: true }}
-              >
-                <h2 className="text-4xl font-bold font-serif text-stone-800 mb-6">Notre Histoire</h2>
-                <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                  Depuis plus de 20 ans, FreshMarket s'engage à vous offrir les meilleurs produits frais et les desserts marocains les plus authentiques. Notre passion pour la qualité et le service client nous pousse à sélectionner avec soin chaque produit.
-                </p>
-                <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                  Nous travaillons directement avec les producteurs locaux pour garantir la fraîcheur et la qualité de nos fruits et légumes. Nos desserts sont préparés selon les recettes traditionnelles marocaines, transmises de génération en génération.
-                </p>
-                <div className="flex items-center space-x-6 mt-8">
-                  <div className="flex items-center">
-                    <Star className="w-6 h-6 text-yellow-400 mr-2" />
-                    <span className="font-semibold text-lg">4.9/5</span>
-                  </div>
-                  <div className="flex items-center text-gray-600 text-lg">
-                    <span>+1000 clients satisfaits</span>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* Contact Section */}
-        <section id="contact" className="py-24 bg-stone-50">
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="text-center mb-16"
-            >
-              <h2 className="text-4xl font-bold font-serif text-stone-800 mb-4">Contactez-nous</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Une question ? Une envie particulière ? Nous sommes là pour vous.
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                viewport={{ once: true }}
-                className="text-center bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-shadow"
-              >
-                <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Phone className="w-10 h-10 text-emerald-600" />
-                </div>
-                <h3 className="text-2xl font-serif font-semibold mb-2 text-stone-800">Téléphone</h3>
-                <p className="text-gray-600 text-lg">+212 6 00 00 00 00</p>
-              </motion.div>
-
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                viewport={{ once: true }}
-                className="text-center bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-shadow"
-              >
-                <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <MessageCircle className="w-10 h-10 text-emerald-600" />
-                </div>
-                <h3 className="text-2xl font-serif font-semibold mb-2 text-stone-800">WhatsApp</h3>
-                <p className="text-gray-600 text-lg">Commande en ligne</p>
-              </motion.div>
-            </div>
-          </div>
-        </section>
+       
       </main>
 
       {/* Cart Sidebar */}
@@ -766,7 +738,7 @@ function App() {
                       {cart.map((item) => (
                         <div key={item.id} className="flex items-center space-x-4 p-3 bg-stone-50 rounded-lg">
                           <img
-                            src={item.image}
+                            src={getProductImage(item.name)}
                             alt={item.name}
                             className="w-16 h-16 object-cover rounded-md"
                           />

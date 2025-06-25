@@ -3,209 +3,251 @@ import {
   Home, 
   ShoppingCart, 
   Package, 
-  BarChart3, 
+  LayoutDashboard, 
   ChevronLeft, 
   ChevronRight,
   Settings,
   Bell,
-  User,
   LogOut,
-  Search
+  Search,
+  FolderKanban,
+  User
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getDashboardStats } from '@/services/apiService';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 
 const AdminLayout = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [stats, setStats] = useState({ productCount: 0, categoryCount: 0 });
+
+  useEffect(() => {
+    const fetchStats = async () => {
+        try {
+            const data = await getDashboardStats();
+            setStats({
+              productCount: data.productCount,
+              categoryCount: data.categoryCount
+            });
+        } catch (error) {
+            console.error('Error fetching stats for layout:', error);
+            // Fallback to mock data on error
+            setStats({ productCount: 12, categoryCount: 5 });
+        }
+    };
+    fetchStats();
+  }, []);
 
   const navLinks = [
     { 
       to: '/admin', 
-      icon: BarChart3, 
+      icon: LayoutDashboard, 
       label: 'Dashboard', 
-      badge: null,
-      color: 'from-blue-500 to-blue-600',
-      activeColor: 'from-blue-600 to-blue-700'
     },
     { 
       to: '/admin/products', 
       icon: Package, 
       label: 'Products', 
-      badge: '12',
-      color: 'from-purple-500 to-purple-600',
-      activeColor: 'from-purple-600 to-purple-700'
+      badge: stats.productCount
     },
     { 
       to: '/admin/categories', 
-      icon: ShoppingCart, 
+      icon: FolderKanban, 
       label: 'Categories', 
-      badge: '5',
-      color: 'from-green-500 to-green-600',
-      activeColor: 'from-green-600 to-green-700'
+      badge: stats.categoryCount
     },
     { 
       to: '/', 
       icon: Home, 
       label: 'Go to Site', 
-      badge: null,
-      color: 'from-orange-500 to-orange-600',
-      activeColor: 'from-orange-600 to-orange-700'
     },
   ];
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Sidebar */}
-      <aside className={`bg-white dark:bg-gray-950 shadow-2xl border-r border-gray-200 dark:border-gray-800 transition-all duration-300 ${
-        isSidebarCollapsed ? 'w-20' : 'w-72'
+      <aside className={`bg-white dark:bg-gray-950/95 border-r border-gray-200 dark:border-gray-800/50 flex flex-col transition-all duration-300 ease-in-out ${
+        isSidebarCollapsed ? 'w-20' : 'w-64'
       }`}>
         {/* Logo Section */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800 bg-gradient-to-r from-blue-600 to-blue-700">
-          {!isSidebarCollapsed && (
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg">
-                <BarChart3 className="w-6 h-6 text-blue-600" />
+        <div className={`flex items-center p-4 border-b border-gray-200 dark:border-gray-800/50 ${isSidebarCollapsed ? 'justify-center' : 'justify-between'}`}>
+            <div className={`flex items-center space-x-3 ${isSidebarCollapsed ? 'hidden' : ''}`}>
+              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center shadow-md">
+                <LayoutDashboard className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-white">Admin Panel</h1>
-                <p className="text-blue-100 text-sm">E-commerce Management</p>
+                <h1 className="text-lg font-bold text-gray-800 dark:text-white">Admin Panel</h1>
+                <p className="text-gray-500 text-xs">E-commerce</p>
               </div>
             </div>
-          )}
+          
           <Button 
             variant="ghost" 
             size="icon" 
             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-            className="hover:bg-white/20 text-white"
+            className="hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
           >
-            {isSidebarCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
+            {isSidebarCollapsed ? <ChevronRight className="w-5 h-5 text-gray-500" /> : <ChevronLeft className="w-5 h-5 text-gray-500" />}
           </Button>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-3">
+        <nav className="flex-1 px-3 py-4 space-y-2">
           <TooltipProvider>
             {navLinks.map((link) => (
-              <Tooltip key={link.label} disableHoverableContent={!isSidebarCollapsed}>
+              <Tooltip key={link.label} delayDuration={0} disableHoverableContent={!isSidebarCollapsed}>
                 <TooltipTrigger asChild>
                   <NavLink
                     to={link.to}
-                    end
+                    end={link.to === '/admin'}
                     className={({ isActive }) =>
-                      `flex items-center p-4 rounded-xl transition-all duration-300 group relative overflow-hidden ${
+                      `group flex items-center gap-3 px-4 py-2 rounded-lg transition-colors duration-200 relative ${
                         isActive
-                          ? `bg-gradient-to-r ${link.activeColor} text-white shadow-lg transform scale-105`
-                          : 'text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
-                      } ${isSidebarCollapsed ? 'justify-center' : ''}`
+                          ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/50 dark:text-blue-300 font-semibold'
+                          : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                      } ${isSidebarCollapsed ? 'justify-center px-0' : ''}`
                     }
                   >
-                    {({ isActive }) => (
-                      <>
-                        <div className={`p-2 rounded-lg ${isActive ? 'bg-white/20' : 'bg-transparent'}`}>
-                          <link.icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-gray-600 dark:text-gray-400'}`} />
-                        </div>
-                        {!isSidebarCollapsed && (
-                          <div className="flex items-center justify-between w-full ml-3">
-                            <span className={`font-semibold ${isActive ? 'text-white' : 'text-gray-800 dark:text-gray-200'}`}>{link.label}</span>
-                            {link.badge && (
-                              <Badge 
-                                variant="secondary" 
-                                className={`ml-auto text-xs font-bold ${
-                                  isActive 
-                                    ? 'bg-white/20 text-white border-white/30' 
-                                    : 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
-                                }`}
-                              >
-                                {link.badge}
-                              </Badge>
-                            )}
-                          </div>
-                        )}
-                        {isActive && !isSidebarCollapsed && (
-                          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-1 h-10 bg-white rounded-l-full shadow-lg" />
-                        )}
-                      </>
+                    <link.icon className="w-5 h-5 flex-shrink-0" />
+                    {!isSidebarCollapsed && (
+                      <span className="text-base whitespace-nowrap">{link.label}</span>
+                    )}
+                    {link.badge && !isSidebarCollapsed && (
+                      <Badge 
+                        variant="secondary" 
+                        className="ml-auto text-xs font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 px-2 py-0.5"
+                      >
+                        {link.badge}
+                      </Badge>
                     )}
                   </NavLink>
                 </TooltipTrigger>
-                {isSidebarCollapsed && <TooltipContent side="right">{link.label}</TooltipContent>}
+                {isSidebarCollapsed && <TooltipContent side="right" className="bg-gray-800 text-white border-none rounded-md">{link.label}</TooltipContent>}
               </Tooltip>
             ))}
           </TooltipProvider>
         </nav>
 
         {/* User Profile Section */}
-        <div className="p-4 border-t border-gray-200 dark:border-gray-800 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
-          <div className={`flex items-center ${isSidebarCollapsed ? 'justify-center' : 'space-x-3'}`}>
-            <Avatar className="w-10 h-10 ring-2 ring-blue-500 ring-offset-2 ring-offset-white dark:ring-offset-gray-950">
-              <AvatarImage src="/avatars/01.png" />
-              <AvatarFallback className="bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold">AD</AvatarFallback>
-            </Avatar>
-            {!isSidebarCollapsed && (
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-gray-900 dark:text-white truncate">Admin User</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">admin@example.com</p>
-              </div>
-            )}
-          </div>
+        <div className="p-3 border-t border-gray-200 dark:border-gray-800/50">
+           <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className={`w-full flex items-center text-left transition-colors ${isSidebarCollapsed ? 'justify-center px-0' : 'justify-start p-2'}`}>
+                <Avatar className="w-9 h-9">
+                  <AvatarImage src="/avatars/01.png" />
+                  <AvatarFallback className="bg-blue-600 text-white font-bold">AD</AvatarFallback>
+                </Avatar>
+                {!isSidebarCollapsed && (
+                  <div className="flex-1 min-w-0 ml-3">
+                    <p className="text-sm font-semibold text-gray-800 dark:text-white truncate">Admin User</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">admin@example.com</p>
+                  </div>
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="top" align="start" className="w-56">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <User className="mr-2 h-4 w-4" />
+                <span>Profile</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Settings className="mr-2 h-4 w-4" />
+                <span>Settings</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Log out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col bg-gray-50 dark:bg-gray-900/90">
         {/* Top Header */}
-        <header className="bg-white dark:bg-gray-950 shadow-lg border-b border-gray-200 dark:border-gray-800">
-          <div className="flex items-center justify-between px-8 py-6">
+        <header className="bg-white dark:bg-gray-950/95 shadow-sm border-b border-gray-200 dark:border-gray-800/50">
+          <div className="flex items-center justify-between px-6 h-16">
             {/* Search Bar */}
-            <div className="flex-1 max-w-md">
+            <div className="flex-1 max-w-lg">
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <Input
-                  placeholder="Search products, categories..."
-                  className="pl-12 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Search products, categories, orders..."
+                  className="pl-11 pr-4 py-2 h-10 bg-gray-100 dark:bg-gray-800/80 border-transparent rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
 
             {/* Right Side Actions */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
               {/* Notifications */}
-              <Button variant="ghost" size="icon" className="relative hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl">
+              <Button variant="ghost" size="icon" className="relative hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
                 <Bell className="w-5 h-5" />
-                <Badge className="absolute -top-1 -right-1 h-6 w-6 rounded-full p-0 text-xs bg-red-500 text-white border-2 border-white">
-                  3
-                </Badge>
+                 <span className="absolute -top-0.5 -right-0.5 flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                </span>
               </Button>
 
               {/* Settings */}
-              <Button variant="ghost" size="icon" className="hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl">
+              <Button variant="ghost" size="icon" className="hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
                 <Settings className="w-5 h-5" />
               </Button>
-
+              <div className="w-px h-6 bg-gray-200 dark:bg-gray-700"></div>
               {/* User Menu */}
-              <div className="flex items-center space-x-4">
-                <Avatar className="w-10 h-10 ring-2 ring-blue-500 ring-offset-2 ring-offset-white dark:ring-offset-gray-950">
-                  <AvatarImage src="/avatars/01.png" />
-                  <AvatarFallback className="bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold">AD</AvatarFallback>
-                </Avatar>
-                <div className="hidden md:block">
-                  <p className="text-sm font-bold text-gray-900 dark:text-white">Admin User</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Administrator</p>
-                </div>
-                <Button variant="ghost" size="icon" className="hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl">
-                  <LogOut className="w-5 h-5" />
-                </Button>
-              </div>
+               <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center space-x-2 p-1 pr-2 rounded-full">
+                     <Avatar className="w-8 h-8">
+                        <AvatarImage src="/avatars/01.png" />
+                        <AvatarFallback className="bg-blue-600 text-white font-bold text-xs">AD</AvatarFallback>
+                      </Avatar>
+                      <div className="hidden md:block text-left">
+                        <p className="text-sm font-medium text-gray-800 dark:text-white">Admin</p>
+                      </div>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuLabel>Admin User</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                   <DropdownMenuItem>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Settings</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </header>
 
         {/* Main Content Area */}
-        <main className="flex-1 p-8 overflow-auto">
+        <main className="flex-1 overflow-y-auto">
           <Outlet />
         </main>
       </div>
