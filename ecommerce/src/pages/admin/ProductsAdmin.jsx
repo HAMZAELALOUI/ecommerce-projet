@@ -163,23 +163,23 @@ const ProductsAdmin = () => {
   }
 
   return (
-    <div className="space-y-6 sm:space-y-8 p-3 sm:p-4 md:p-8 bg-gray-50 min-h-screen ml-0 md:ml-12 px-2 sm:px-6">
+    <div className="space-y-6 sm:space-y-8 p-2 sm:p-4 md:p-8 bg-gray-50 min-h-screen ml-0 md:ml-12 px-1 sm:px-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-800">Products Management</h1>
-          <p className="text-sm sm:text-base text-gray-500">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-gray-800">Products Management</h1>
+          <p className="text-xs sm:text-sm md:text-base text-gray-500">
             Manage your product catalog and inventory
           </p>
         </div>
-        <Button onClick={handleAdd} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm hover:shadow-md transition-all w-full sm:w-auto">
+        <Button onClick={handleAdd} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm hover:shadow-md transition-all w-full sm:w-auto text-xs sm:text-sm md:text-base py-2 px-3">
           <PlusCircle className="h-4 w-4 sm:h-5 sm:w-5" />
-          <span className="text-sm sm:text-base">Add Product</span>
+          <span className="text-xs sm:text-sm md:text-base">Add Product</span>
         </Button>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-2 sm:gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-xs sm:text-sm font-medium text-gray-500">Total Products</CardTitle>
@@ -219,26 +219,26 @@ const ProductsAdmin = () => {
       </div>
 
       {/* Filters & Table */}
-      <Card className="shadow-md rounded-xl">
+      <Card className="shadow-md rounded-xl mt-2">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-gray-700 text-lg sm:text-xl">
+          <CardTitle className="flex items-center gap-2 text-gray-700 text-base sm:text-lg md:text-xl">
             <Filter className="h-4 w-4 sm:h-5 sm:w-5" />
             Product List
           </CardTitle>
-          <div className="flex gap-3 sm:gap-4 pt-4 flex-col sm:flex-row">
-            <div className="flex-1">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 pt-2 sm:pt-4">
+            <div className="flex-1 min-w-0">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
                 <Input
                   placeholder="Search by name or description..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 rounded-lg text-sm sm:text-base"
+                  className="pl-10 rounded-lg text-xs sm:text-sm md:text-base"
                 />
               </div>
             </div>
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger className="w-full sm:w-[240px] rounded-lg">
+              <SelectTrigger className="w-full sm:w-[180px] md:w-[240px] rounded-lg text-xs sm:text-sm md:text-base">
                 <SelectValue placeholder="Filter by Category" />
               </SelectTrigger>
               <SelectContent>
@@ -253,8 +253,8 @@ const ProductsAdmin = () => {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="rounded-lg border overflow-x-auto">
-            <Table>
+          <div className="rounded-lg border overflow-x-auto bg-white shadow-sm">
+            <Table className="min-w-[600px] text-xs sm:text-sm md:text-base">
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[40%] text-xs sm:text-sm">Product</TableHead>
