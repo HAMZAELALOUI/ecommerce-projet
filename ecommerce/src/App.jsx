@@ -517,14 +517,14 @@ function App() {
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, scale: 0.95, x: -30 }}
+                whileInView={{ opacity: 1, scale: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
                 viewport={{ once: true }}
               >
                 <img
-                  src={histoireImg}
-                  alt="Notre Histoire"
+                  src={fruitsImg}
+                  alt="Fruits et Légumes"
                   className="w-full h-auto max-h-[500px] object-cover rounded-2xl shadow-xl"
                 />
               </motion.div>
