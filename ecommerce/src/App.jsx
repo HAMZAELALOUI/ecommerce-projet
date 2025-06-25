@@ -19,11 +19,90 @@ import ProtectedRoute from './components/admin/ProtectedRoute.jsx'
 import Login from './pages/Login.jsx'
 import Profile from './pages/admin/Profile.jsx'
 
-// Données des produits - SERONT REMPLACÉES PAR L'API
-// const products = [ ... ];
+// Données des produits - Données statiques pour améliorer l'affichage
+const products = [
+  // Fruits
+  {
+    id: 1,
+    name: 'Pommes Rouges',
+    category: 'fruits',
+    price: 25,
+    image: '/assets/pommerouge.jpeg',
+    description: 'Pommes rouges fraîches et croquantes',
+    unit: 'kg'
+  },
+  {
+    id: 2,
+    name: 'Bananes',
+    category: 'fruits',
+    price: 18,
+    image: '/assets/banane.jpeg',
+    description: 'Bananes mûres et sucrées',
+    unit: 'kg'
+  },
+  {
+    id: 3,
+    name: 'Oranges',
+    category: 'fruits',
+    price: 22,
+    image: '/assets/oranges.jpeg',
+    description: 'Oranges juteuses riches en vitamine C',
+    unit: 'kg'
+  },
+  {
+    id: 4,
+    name: 'Fraises',
+    category: 'fruits',
+    price: 35,
+    image: '/assets/fraise.jpeg',
+    description: 'Fraises fraîches de saison',
+    unit: 'kg'
+  },
+  // Légumes
+  {
+    id: 5,
+    name: 'Tomates',
+    category: 'vegetables',
+    price: 15,
+    image: '/assets/tomates.jpg',
+    description: 'Tomates fraîches et savoureuses',
+    unit: 'kg'
+  },
+  {
+    id: 6,
+    name: 'Carottes',
+    category: 'vegetables',
+    price: 12,
+    image: '/assets/Carrote.jpeg',
+    description: 'Carottes croquantes et nutritives',
+    unit: 'kg'
+  },
+  {
+    id: 7,
+    name: 'Courgettes',
+    category: 'vegetables',
+    price: 20,
+    image: '/assets/Courgettes.jpeg',
+    description: 'Courgettes tendres et fraîches',
+    unit: 'kg'
+  },
+  {
+    id: 8,
+    name: 'Poivrons',
+    category: 'vegetables',
+    price: 28,
+    image: '/assets/Poivrons.jpeg',
+    description: 'Poivrons colorés et croquants',
+    unit: 'kg'
+  }
+];
 
-// Données des catégories - SERONT REMPLACÉES PAR L'API
-// const categories = [ ... ];
+// Données des catégories - Données statiques pour le filtrage
+const categories = [
+  { id: 'all', name: 'Tous les Produits', icon: '🛒' },
+  { id: 'fruits', name: 'Fruits Frais', icon: '🍎' },
+  { id: 'vegetables', name: 'Légumes', icon: '🥕' },
+];
 
 const packs = [
   {
@@ -271,8 +350,9 @@ function ProductsPage() {
 }
 
 function App() {
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
+  // Utilisation des données statiques pour améliorer l'affichage
+  const [productsList] = useState(products);
+  const [categoriesList] = useState(categories);
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [cart, setCart] = useState([])
   const [isCartOpen, setIsCartOpen] = useState(false)
@@ -280,57 +360,18 @@ function App() {
   const [isOrderFormOpen, setIsOrderFormOpen] = useState(false)
   const [isChatOpen, setIsChatOpen] = useState(false)
   const histoireRef = useRef(null)
-  const [productTypeFilter, setProductTypeFilter] = useState('all'); // 'all', 'fruits', 'legumes'
+  const [productTypeFilter, setProductTypeFilter] = useState('all'); // 'all', 'fruits', 'vegetables'
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-  const API_BASE_URL = 'http://localhost:8000';
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const productsRes = await fetchProducts();
-        const productsData = productsRes.data.data.map(p => ({
-          ...p,
-          image: `${API_BASE_URL}${p.image_url}`
-        }));
-        setProducts(productsData);
-
-        const categoriesRes = await fetchCategories();
-        const fetchedCategories = categoriesRes.data.data.map(cat => ({
-          ...cat,
-          icon: categoryIcons[cat.name] || '📦'
-        }));
-        
-        const allCategory = { id: 'all', name: 'Tous les Produits', icon: '🛒' };
-        setCategories([allCategory, ...fetchedCategories]);
-
-      } catch (error) {
-        console.error("Erreur lors du chargement des données depuis l'API:", error);
-      }
-    };
-
-    loadData();
-  }, []);
-
-  // Fonction pour déterminer si un produit est un fruit ou un légume
-  const isFruit = (name) => {
-    const n = name.toLowerCase();
-    return (
-      n.includes('banane') || n.includes('fraise') || n.includes('pomme') || n.includes('orange') || n.includes('fruit')
-    );
-  };
-  const isLegume = (name) => {
-    const n = name.toLowerCase();
-    return (
-      n.includes('carotte') || n.includes('courgette') || n.includes('poivron') || n.includes('tomate') || n.includes('légume') || n.includes('legume')
-    );
-  };
-
-  // Filtrage combiné
-  const filteredProducts = products.filter(product => {
-    if (selectedCategory !== 'all' && product.category_id !== selectedCategory) return false;
-    if (productTypeFilter === 'fruits') return isFruit(product.name);
-    if (productTypeFilter === 'legumes') return isLegume(product.name);
+  // Filtrage basé sur les catégories statiques
+  const filteredProducts = productsList.filter(product => {
+    // Filtrage par catégorie principale
+    if (selectedCategory !== 'all' && product.category !== selectedCategory) return false;
+    
+    // Filtrage par type de produit
+    if (productTypeFilter === 'fruits') return product.category === 'fruits';
+    if (productTypeFilter === 'vegetables') return product.category === 'vegetables';
+    
     return true;
   });
 
@@ -391,7 +432,7 @@ function App() {
       }
     }
   }, [location]);
-  
+
   // Scroll vers la section Notre Histoire
   const scrollToHistoire = (e) => {
     e.preventDefault()
@@ -442,7 +483,7 @@ function App() {
             <NavLink to="/#products" className="text-gray-600 hover:text-emerald-600 transition-colors">Produits</NavLink>
             <NavLink to="/#packs" className="text-gray-600 hover:text-emerald-600 transition-colors">Nos Packs</NavLink>
             <NavLink to="/login" className="text-gray-600 hover:text-emerald-600 transition-colors">Admin</NavLink>
-          </nav>
+            </nav>
 
           {/* Mobile Menu Button */}
           <div className="lg:hidden">
@@ -459,19 +500,19 @@ function App() {
           </div>
 
           <div className="flex items-center space-x-2 sm:space-x-4">
-            <Button
+              <Button
               variant="ghost"
               size="icon"
-              onClick={() => setIsCartOpen(true)}
+                onClick={() => setIsCartOpen(true)}
               className="relative hover:bg-emerald-50 rounded-full p-2 sm:p-3"
-            >
+              >
               <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6 text-stone-700" />
-              {cart.length > 0 && (
+                {cart.length > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center">
                   {cart.length}
                 </span>
-              )}
-            </Button>
+                )}
+              </Button>
           </div>
         </div>
 
@@ -555,15 +596,15 @@ function App() {
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 max-w-2xl mx-auto drop-shadow-md px-4">
               La fraîcheur de la nature, livrée à votre porte. Goûtez la différence.
-            </p>
-            <motion.a
+                  </p>
+                  <motion.a
               href="#products"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold transition-all shadow-lg hover:shadow-xl"
             >
               Découvrir nos Produits
-            </motion.a>
+                  </motion.a>
           </motion.div>
         </section>
 
@@ -572,11 +613,11 @@ function App() {
           <div className="container mx-auto px-4 sm:px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
              
-              <motion.div
+                  <motion.div
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                viewport={{ once: true }}
+                    viewport={{ once: true }}
               >
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-serif text-stone-800 mb-4 sm:mb-6">Notre Histoire</h2>
                 <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 leading-relaxed">
@@ -589,22 +630,22 @@ function App() {
                  
                 
                 </div>
-              </motion.div>
-              <motion.div
+                  </motion.div>
+                  <motion.div
                 initial={{ opacity: 0, scale: 0.95, x: -30 }}
                 whileInView={{ opacity: 1, scale: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
-                viewport={{ once: true }}
-              >
-                <img
+                    viewport={{ once: true }}
+                  >
+                    <img
                   src="/assets/fruits.jpg"
                   alt="Fruits et Légumes"
                   className="w-full h-auto max-h-[500px] object-cover rounded-2xl shadow-xl"
-                />
-              </motion.div>
+                    />
+                  </motion.div>
             </div>
-          </div>
-        </section>
+                </div>
+              </section>
 
         {/* Products Section */}
         <section id="products" className="py-12 sm:py-16 md:py-20 lg:py-24 bg-white">
@@ -613,21 +654,21 @@ function App() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
+                viewport={{ once: true }}
               className="text-center mb-8 sm:mb-12"
-            >
-              <motion.h2
+              >
+                <motion.h2
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, type: 'spring', stiffness: 60 }}
                 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-extrabold text-orange-600 mb-6 sm:mb-8 md:mb-10 text-center tracking-tight drop-shadow-lg"
               >
                 Nos Trésors Naturels
-              </motion.h2>
+                </motion.h2>
               <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
                 Chaque produit est une promesse de fraîcheur et de qualité, directement du producteur à votre table.
               </p>
-            </motion.div>
+                    </motion.div>
 
             {/* Category Filter */}
             <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10">
@@ -648,17 +689,17 @@ function App() {
                 <span className="mr-1 sm:mr-2">🍎</span> Fruits
               </Button>
               <Button
-                onClick={() => setProductTypeFilter('legumes')}
-                variant={productTypeFilter === 'legumes' ? 'default' : 'outline'}
+                onClick={() => setProductTypeFilter('vegetables')}
+                variant={productTypeFilter === 'vegetables' ? 'default' : 'outline'}
                 size="sm"
-                className={`${productTypeFilter === 'legumes' ? 'bg-green-600 text-white shadow-md' : 'bg-white border-stone-300 text-stone-700 hover:bg-stone-100 hover:border-green-400'} text-xs sm:text-sm`}
+                className={`${productTypeFilter === 'vegetables' ? 'bg-green-600 text-white shadow-md' : 'bg-white border-stone-300 text-stone-700 hover:bg-stone-100 hover:border-green-400'} text-xs sm:text-sm`}
               >
                 <span className="mr-1 sm:mr-2">🥕</span> Légumes
               </Button>
-            </div>
+                </div>
 
-            {/* Products Grid */}
-            <motion.div
+              {/* Products Grid */}
+                <motion.div 
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -667,23 +708,23 @@ function App() {
             >
               {filteredProducts
                 .map((product, index) => (
-                  <motion.div
-                    key={product.id}
+                      <motion.div
+                        key={product.id}
                     initial={{ opacity: 0, y: 30, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     transition={{ duration: 0.5, delay: index * 0.08, type: 'spring', stiffness: 60 }}
                     whileHover={{ scale: 1.04, boxShadow: '0 8px 32px rgba(16, 185, 129, 0.12)' }}
                     className="h-full group overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-200/80 bg-white/60 backdrop-blur-md"
                   >
-                    <CardHeader className="p-0">
+                          <CardHeader className="p-0">
                       <motion.div
                         className="relative overflow-hidden rounded-t-lg"
                         whileHover={{ scale: 1.06 }}
                         transition={{ type: 'spring', stiffness: 80 }}
                       >
                         <motion.img
-                          src={getProductImage(product.name)}
-                          alt={product.name}
+                          src={product.image}
+                                alt={product.name}
                           className="w-full h-40 sm:h-48 object-cover transition-transform"
                           initial={{ opacity: 0, scale: 0.95 }}
                           animate={{ opacity: 1, scale: 1 }}
@@ -691,8 +732,8 @@ function App() {
                           whileHover={{ scale: 1.12 }}
                         />
                         <Badge className="absolute top-2 right-2 bg-green-600 text-xs">
-                          {product.price} MAD/{product.unit}
-                        </Badge>
+                                {product.price} MAD/{product.unit}
+                              </Badge>
                       </motion.div>
                     </CardHeader>
                     <CardContent className="p-3 sm:p-5">
@@ -708,7 +749,7 @@ function App() {
                           <Plus className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                           Ajouter
                         </Button>
-                      </div>
+                            </div>
                     </CardContent>
                   </motion.div>
                 ))}
@@ -757,7 +798,7 @@ function App() {
                       >
                         <CardTitle className="text-lg sm:text-xl md:text-2xl font-serif text-emerald-700">{pack.name}</CardTitle>
                       </motion.div>
-                    </CardHeader>
+                          </CardHeader>
                     <CardContent className="space-y-3 sm:space-y-4 flex-grow p-3 sm:p-4">
                       {/* Fruits */}
                       <div>
@@ -805,182 +846,182 @@ function App() {
                           {pack.highlight}
                         </p>
                       </div>
-                    </CardContent>
+                          </CardContent>
                     <CardFooter className="p-3 sm:p-4">
-                      <Button
+                            <Button
                         className="w-full bg-green-600 hover:bg-green-700 rounded-full py-2 sm:py-3 text-sm sm:text-lg font-bold shadow-lg transition-all mt-2 sm:mt-4"
                         onClick={() => addPackToCart(pack)}
-                      >
+                            >
                         Commander ce Pack
-                      </Button>
-                    </CardFooter>
-                  </Card>
+                            </Button>
+                          </CardFooter>
+                        </Card>
+                      </motion.div>
+                    ))}
                 </motion.div>
-              ))}
-            </motion.div>
           </div>
         </section>
 
        
       </main>
 
-      {/* Cart Sidebar */}
-      <AnimatePresence>
-        {isCartOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+        {/* Cart Sidebar */}
+        <AnimatePresence>
+          {isCartOpen && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
               className="fixed inset-0 bg-black/50 z-40"
-              onClick={() => setIsCartOpen(false)}
-            />
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                onClick={() => setIsCartOpen(false)}
+              />
+              <motion.div
+                initial={{ x: '100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '100%' }}
+                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               className="fixed right-0 top-0 h-full w-full max-w-sm sm:max-w-md bg-white/60 backdrop-blur-md shadow-2xl z-50 flex flex-col"
             >
               <div className="p-4 sm:p-6 flex-shrink-0">
                 <div className="flex items-center justify-between mb-4 sm:mb-6">
                   <h3 className="text-xl sm:text-2xl font-serif font-bold text-stone-800">Mon Panier</h3>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setIsCartOpen(false)}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setIsCartOpen(false)}
                     className="rounded-full hover:bg-stone-100"
-                  >
+                    >
                     <X className="w-4 h-4 sm:w-5 sm:h-5 text-stone-600" />
-                  </Button>
-                </div>
+                    </Button>
+                  </div>
 
-                {cart.length === 0 ? (
-                  <div className="text-center py-8">
+                  {cart.length === 0 ? (
+                    <div className="text-center py-8">
                     <ShoppingCart className="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-gray-300 mb-4" />
                     <p className="text-gray-500 text-sm sm:text-base">Votre panier est vide</p>
-                  </div>
-                ) : (
-                  <>
+                    </div>
+                  ) : (
+                    <>
                     <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6 flex-grow overflow-y-auto px-1">
-                      {cart.map((item) => (
+                        {cart.map((item) => (
                         <div key={item.id} className="flex items-center space-x-3 sm:space-x-4 p-2 sm:p-3 bg-white/40 backdrop-blur rounded-lg">
                           <div className="flex space-x-1 sm:space-x-2">
                             <img
-                              src={getProductImage(item.name)}
+                              src={item.image}
                               alt={item.name}
                               className="w-10 h-10 sm:w-14 sm:h-14 object-cover rounded-md"
                             />
                             <img
-                              src={getProductImage(item.name)}
+                              src={item.image}
                               alt={item.name + ' 2'}
                               className="w-10 h-10 sm:w-14 sm:h-14 object-cover rounded-md"
                             />
-                          </div>
+                            </div>
                           <div className="flex-1 min-w-0">
                             <h4 className="font-medium text-stone-800 text-sm sm:text-base truncate">{item.name}</h4>
                             <p className="text-xs sm:text-sm text-gray-500">{item.price} MAD/{item.unit}</p>
                           </div>
                           <div className="flex items-center space-x-1 sm:space-x-2">
-                            <Button
+                              <Button
                               size="icon"
-                              variant="outline"
-                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                variant="outline"
+                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
                               className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
-                            >
+                              >
                               <Minus className="w-3 h-3 sm:w-4 sm:h-4" />
-                            </Button>
+                              </Button>
                             <span className="w-6 sm:w-8 text-center text-sm sm:text-md font-semibold">{item.quantity}</span>
-                            <Button
+                              <Button
                               size="icon"
-                              variant="outline"
-                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                variant="outline"
+                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
                               className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
-                            >
+                              >
                               <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
+                              </Button>
+                            </div>
+                            <Button
+                            size="icon"
+                              variant="ghost"
+                              onClick={() => removeFromCart(item.id)}
+                            className="text-stone-500 hover:text-red-500 hover:bg-red-100 rounded-full w-6 h-6 sm:w-8 sm:h-8"
+                            >
+                            <X className="w-3 h-3 sm:w-4 sm:h-4" />
                             </Button>
                           </div>
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            onClick={() => removeFromCart(item.id)}
-                            className="text-stone-500 hover:text-red-500 hover:bg-red-100 rounded-full w-6 h-6 sm:w-8 sm:h-8"
-                          >
-                            <X className="w-3 h-3 sm:w-4 sm:h-4" />
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
 
                     <div className="border-t pt-4 sm:pt-6 mt-auto flex-shrink-0">
                       <div className="flex justify-between items-center mb-3 sm:mb-4">
                         <span className="text-base sm:text-lg font-bold text-stone-800">Total:</span>
                         <span className="text-xl sm:text-2xl font-bold text-emerald-600">{total} MAD</span>
-                      </div>
-                      <Button
-                        onClick={openOrderForm}
+                        </div>
+                        <Button
+                          onClick={openOrderForm}
                         className="w-full bg-emerald-600/80 hover:bg-emerald-700/80 text-base sm:text-lg py-4 sm:py-6 rounded-lg backdrop-blur-md"
-                      >
+                        >
                         <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                        Commander via WhatsApp
-                      </Button>
-                    </div>
-                  </>
-                )}
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+                          Commander via WhatsApp
+                        </Button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
 
-      {/* Floating Actions (audio, email, plus) en bas à gauche */}
-      <FloatingActions />
+        {/* Floating Actions (audio, email, plus) en bas à gauche */}
+        <FloatingActions />
 
-      {/* Chatbot Button en bas à droite (bleu, robot) */}
-      <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={() => setIsChatbotOpen(!isChatbotOpen)}
+        {/* Chatbot Button en bas à droite (bleu, robot) */}
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => setIsChatbotOpen(!isChatbotOpen)}
         className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 w-12 h-12 sm:w-14 sm:h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center z-50 chatbot-glow"
-        style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.18)' }}
-      >
+          style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.18)' }}
+        >
         <Bot className="w-6 h-6 sm:w-8 sm:h-8" />
-        <style>{`
-          .chatbot-glow:hover {
-            box-shadow: 0 0 0 0 #2563eb, 0 0 16px 4px #2563eb66, 0 4px 16px rgba(0,0,0,0.18);
-            animation: chatbot-glow-anim 1.5s infinite alternate;
-          }
-          @keyframes chatbot-glow-anim {
-            0% { box-shadow: 0 0 0 0 #2563eb, 0 0 16px 4px #2563eb66, 0 4px 16px rgba(0,0,0,0.18); }
-            100% { box-shadow: 0 0 0 8px #2563eb44, 0 0 32px 8px #2563eb66, 0 4px 16px rgba(0,0,0,0.18); }
-          }
-        `}</style>
-      </motion.button>
+          <style>{`
+            .chatbot-glow:hover {
+              box-shadow: 0 0 0 0 #2563eb, 0 0 16px 4px #2563eb66, 0 4px 16px rgba(0,0,0,0.18);
+              animation: chatbot-glow-anim 1.5s infinite alternate;
+            }
+            @keyframes chatbot-glow-anim {
+              0% { box-shadow: 0 0 0 0 #2563eb, 0 0 16px 4px #2563eb66, 0 4px 16px rgba(0,0,0,0.18); }
+              100% { box-shadow: 0 0 0 8px #2563eb44, 0 0 32px 8px #2563eb66, 0 4px 16px rgba(0,0,0,0.18); }
+            }
+          `}</style>
+        </motion.button>
 
-      {/* ChatBot : positionné juste au-dessus du bouton, aligné à droite, stable */}
-      <AnimatePresence>
-        {isChatbotOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 40, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 40, scale: 0.95 }}
-            transition={{ duration: 0.35, type: 'spring', stiffness: 80 }}
+        {/* ChatBot : positionné juste au-dessus du bouton, aligné à droite, stable */}
+        <AnimatePresence>
+          {isChatbotOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 40, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 40, scale: 0.95 }}
+              transition={{ duration: 0.35, type: 'spring', stiffness: 80 }}
             className="fixed right-4 sm:right-6 bottom-[72px] sm:bottom-[88px] z-50 w-full"
             style={{ minWidth: 280, maxWidth: 384 }}
-          >
-            <ChatBot
-              isOpen={isChatbotOpen}
-              onClose={() => setIsChatbotOpen(false)}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+            >
+              <ChatBot
+                isOpen={isChatbotOpen}
+                onClose={() => setIsChatbotOpen(false)}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-      {/* Footer */}
-      <motion.footer
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, duration: 0.7, type: 'spring', stiffness: 60 }}
+        {/* Footer */}
+        <motion.footer
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.7, type: 'spring', stiffness: 60 }}
         className="bg-gradient-to-br from-[#18181b] via-[#23272f] to-[#18181b] text-white py-8 sm:py-12 rounded-t-2xl shadow-2xl mt-8"
       >
         <div className="container mx-auto px-4 sm:px-6">
@@ -992,8 +1033,8 @@ function App() {
                 <h3 className="text-2xl font-serif font-extrabold tracking-tight">FreshMarket</h3>
               </div>
               <p className="text-stone-300 text-base max-w-xs">
-                Votre source de confiance pour des produits frais et des desserts marocains authentiques.
-              </p>
+                  Votre source de confiance pour des produits frais et des desserts marocains authentiques.
+                </p>
               {/* Réseaux sociaux */}
               <div className="flex gap-4 mt-4">
                 <a href="#" aria-label="Facebook" className="hover:scale-110 transition-transform"><svg className="w-6 h-6 text-blue-400 hover:text-blue-600" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 4.991 3.657 9.128 8.438 9.877v-6.987h-2.54v-2.89h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.242 0-1.632.771-1.632 1.562v1.875h2.773l-.443 2.89h-2.33v6.987C18.343 21.128 22 16.991 22 12z"/></svg></a>
@@ -1007,43 +1048,83 @@ function App() {
               <div className="space-y-2 text-stone-300 text-base">
                 <div className="flex items-center justify-center md:justify-start gap-2">
                   <Phone className="w-4 h-4 mr-1 text-emerald-400" />
-                  <span>+212 6 00 00 00 00</span>
-                </div>
+                    <span>+212 6 00 00 00 00</span>
+                  </div>
                 <div className="flex items-center justify-center md:justify-start gap-2">
                   <MapPin className="w-4 h-4 mr-1 text-blue-400" />
                   <span>Marrakech , Maroc</span>
+                  </div>
                 </div>
               </div>
-            </div>
             {/* Bloc horaires */}
             <div className="flex-1">
               <h4 className="text-lg font-bold flex items-center gap-2 mb-3"><svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1.75A10.25 10.25 0 1 0 22.25 12 10.26 10.26 0 0 0 12 1.75zm0 18.5A8.25 8.25 0 1 1 20.25 12 8.26 8.26 0 0 1 12 20.25zm.62-13.5h-1.25v5.13l4.44 2.64.62-1.03-3.81-2.26z"/></svg> Horaires</h4>
-              <div className="text-stone-300 text-base">
-                <p>Lun - Sam: 8h00 - 20h00</p>
-                <p>Dimanche: 9h00 - 18h00</p>
+              <div className="text-stone-300 text-base mb-4">
+                  <p>Lun - Sam: 8h00 - 20h00</p>
+                  <p>Dimanche: 9h00 - 18h00</p>
+                </div>
+              {/* Bouton Admin pour les administrateurs */}
+              <div className="mt-4">
+                <Link 
+                  to="/login"
+                  className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium shadow-lg hover:shadow-xl"
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 4L13.5 7H7V9H13.5L15 12L21 9ZM16 13C14.9 13 14 13.9 14 15V21H16V15C16 14.4 16.4 14 17 14S18 14.4 18 15V21H20V15C20 13.9 19.1 13 18 13H16Z"/>
+                  </svg>
+                  Espace Admin
+                </Link>
+              </div>
               </div>
             </div>
-          </div>
-          <div className="border-t border-stone-700/60 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-stone-400 text-sm sm:text-base flex flex-col items-center gap-2">
-            <div className="flex gap-3 justify-center mb-2">
-              <a href="#" aria-label="Facebook" className="hover:scale-110 transition-transform"><svg className="w-5 h-5 text-blue-400 hover:text-blue-600" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 4.991 3.657 9.128 8.438 9.877v-6.987h-2.54v-2.89h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.242 0-1.632.771-1.632 1.562v1.875h2.773l-.443 2.89h-2.33v6.987C18.343 21.128 22 16.991 22 12z"/></svg></a>
-              <a href="#" aria-label="Instagram" className="hover:scale-110 transition-transform"><svg className="w-5 h-5 text-pink-400 hover:text-pink-600" fill="currentColor" viewBox="0 0 24 24"><path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5A4.25 4.25 0 0 0 20.5 16.25v-8.5A4.25 4.25 0 0 0 16.25 3.5zm4.25 2.25a6.25 6.25 0 1 1 0 12.5 6.25 6.25 0 0 1 0-12.5zm0 1.5a4.75 4.75 0 1 0 0 9.5 4.75 4.75 0 0 0 0-9.5zm6.25 1.25a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg></a>
-              <a href="#" aria-label="WhatsApp" className="hover:scale-110 transition-transform"><svg className="w-5 h-5 text-green-400 hover:text-green-600" fill="currentColor" viewBox="0 0 24 24"><path d="M20.52 3.48A12.07 12.07 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.12.55 4.18 1.6 6.01L0 24l6.18-1.62A11.93 11.93 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.21-3.48-8.52zM12 22c-1.7 0-3.36-.33-4.92-.98l-.35-.15-3.67.96.98-3.57-.18-.36A9.94 9.94 0 0 1 2 12c0-5.52 4.48-10 10-10s10 4.48 10 10-4.48 10-10 10zm5.2-7.8c-.28-.14-1.65-.81-1.9-.9-.25-.09-.43-.14-.61.14-.18.28-.7.9-.86 1.08-.16.18-.32.2-.6.07-.28-.14-1.18-.44-2.25-1.4-.83-.74-1.39-1.65-1.55-1.93-.16-.28-.02-.43.12-.57.13-.13.28-.34.42-.51.14-.17.18-.29.28-.48.09-.19.05-.36-.02-.5-.07-.14-.61-1.47-.84-2.01-.22-.53-.45-.46-.62-.47-.16-.01-.36-.01-.56-.01-.19 0-.5.07-.76.34-.26.27-1 1-.98 2.44.02 1.44 1.02 2.84 1.16 3.04.14.2 2.01 3.08 4.88 4.2.68.29 1.21.46 1.62.59.68.22 1.3.19 1.79.12.55-.08 1.65-.67 1.89-1.32.23-.65.23-1.2.16-1.32-.07-.12-.25-.19-.53-.33z"/></svg></a>
+          <div className="border-t border-stone-700/60 mt-6 sm:mt-8 pt-6 sm:pt-8">
+            {/* Navigation et liens utiles */}
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
+              <div className="flex flex-wrap justify-center md:justify-start gap-4 text-sm">
+                <Link to="/" className="text-stone-300 hover:text-emerald-400 transition-colors">Accueil</Link>
+                <a href="#products" className="text-stone-300 hover:text-emerald-400 transition-colors">Produits</a>
+                <a href="#packs" className="text-stone-300 hover:text-emerald-400 transition-colors">Nos Packs</a>
+                <a href="#histoire" className="text-stone-300 hover:text-emerald-400 transition-colors">Notre Histoire</a>
+                <Link to="/login" className="text-stone-300 hover:text-emerald-400 transition-colors font-medium">🔐 Admin</Link>
+              </div>
+              
+              {/* Réseaux sociaux */}
+              <div className="flex gap-3 justify-center">
+                <a href="#" aria-label="Facebook" className="p-2 rounded-full bg-stone-700/50 hover:bg-blue-600 transition-all duration-200 hover:scale-110">
+                  <svg className="w-4 h-4 text-blue-400 hover:text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 4.991 3.657 9.128 8.438 9.877v-6.987h-2.54v-2.89h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.242 0-1.632.771-1.632 1.562v1.875h2.773l-.443 2.89h-2.33v6.987C18.343 21.128 22 16.991 22 12z"/>
+                  </svg>
+                </a>
+                <a href="#" aria-label="Instagram" className="p-2 rounded-full bg-stone-700/50 hover:bg-pink-600 transition-all duration-200 hover:scale-110">
+                  <svg className="w-4 h-4 text-pink-400 hover:text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5A4.25 4.25 0 0 0 20.5 16.25v-8.5A4.25 4.25 0 0 0 16.25 3.5zm4.25 2.25a6.25 6.25 0 1 1 0 12.5 6.25 6.25 0 0 1 0-12.5zm0 1.5a4.75 4.75 0 1 0 0 9.5 4.75 4.75 0 0 0 0-9.5zm6.25 1.25a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                  </svg>
+                </a>
+                <a href="#" aria-label="WhatsApp" className="p-2 rounded-full bg-stone-700/50 hover:bg-green-600 transition-all duration-200 hover:scale-110">
+                  <svg className="w-4 h-4 text-green-400 hover:text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.52 3.48A12.07 12.07 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.12.55 4.18 1.6 6.01L0 24l6.18-1.62A11.93 11.93 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.21-3.48-8.52zM12 22c-1.7 0-3.36-.33-4.92-.98l-.35-.15-3.67.96.98-3.57-.18-.36A9.94 9.94 0 0 1 2 12c0-5.52 4.48-10 10-10s10 4.48 10 10-4.48 10-10 10zm5.2-7.8c-.28-.14-1.65-.81-1.9-.9-.25-.09-.43-.14-.61.14-.18.28-.7.9-.86 1.08-.16.18-.32.2-.6.07-.28-.14-1.18-.44-2.25-1.4-.83-.74-1.39-1.65-1.55-1.93-.16-.28-.02-.43.12-.57.13-.13.28-.34.42-.51.14-.17.18-.29.28-.48.09-.19.05-.36-.02-.5-.07-.14-.61-1.47-.84-2.01-.22-.53-.45-.46-.62-.47-.16-.01-.36-.01-.56-.01-.19 0-.5.07-.76.34-.26.27-1 1-.98 2.44.02 1.44 1.02 2.84 1.16 3.04.14.2 2.01 3.08 4.88 4.2.68.29 1.21.46 1.62.59.68.22 1.3.19 1.79.12.55-.08 1.65-.67 1.89-1.32.23-.65.23-1.2.16-1.32-.07-.12-.25-.19-.53-.33z"/>
+                  </svg>
+                </a>
+              </div>
             </div>
-            <p>&copy; 2024 FreshMarket. Tous droits réservés.</p>
+            
+            {/* Copyright */}
+            <div className="text-center text-stone-400 text-sm border-t border-stone-700/40 pt-4">
+              <p>&copy; 2024 FreshMarket. Tous droits réservés. | Conçu avec ❤️ pour vous offrir le meilleur des produits frais.</p>
+            </div>
           </div>
-        </div>
-      </motion.footer>
+          </div>
+        </motion.footer>
 
-      {/* WhatsApp Order Form */}
-      <WhatsAppOrderForm
-        cart={cart}
-        total={total}
-        isOpen={isOrderFormOpen}
-        onClose={() => setIsOrderFormOpen(false)}
-      />
+        {/* WhatsApp Order Form */}
+        <WhatsAppOrderForm
+          cart={cart}
+          total={total}
+          isOpen={isOrderFormOpen}
+          onClose={() => setIsOrderFormOpen(false)}
+        />
 
-    </motion.div>
+      </motion.div>
   )
 }
 
