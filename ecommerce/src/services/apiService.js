@@ -31,6 +31,23 @@ export const updateProduct = (id, productData) => api.put(`/products/${id}`, pro
 export const deleteProduct = (id) => api.delete(`/products/${id}`);
 export const fetchProductsByCategory = (categoryId) => api.get(`/products/category/${categoryId}`);
 
+// --- Produits avec FormData (pour upload d'images) ---
+export const createProductWithFormData = (formData) => {
+  return api.post('/products', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
+export const updateProductWithFormData = (id, formData) => {
+  return api.put(`/products/${id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
 // --- Statistiques (Exemple) ---
 export const getDashboardStats = async () => {
     const [products, categories] = await Promise.all([
