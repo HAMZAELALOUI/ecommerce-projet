@@ -995,38 +995,55 @@ function App() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.7, type: 'spring', stiffness: 60 }}
-        className="bg-stone-900 text-white py-8 sm:py-12"
+        className="bg-gradient-to-br from-[#18181b] via-[#23272f] to-[#18181b] text-white py-8 sm:py-12 rounded-t-2xl shadow-2xl mt-8"
       >
         <div className="container mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 text-center md:text-left">
-            <div>
-              <h3 className="text-xl sm:text-2xl font-serif font-bold mb-3 sm:mb-4">FreshMarket</h3>
-              <p className="text-stone-300 text-sm sm:text-base">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-8 md:gap-0 text-center md:text-left">
+            {/* Bloc logo & description */}
+            <div className="flex-1 flex flex-col items-center md:items-start mb-6 md:mb-0">
+              <div className="flex items-center gap-3 mb-3">
+                <img src={logoImg} alt="FreshMarket Logo" className="h-10 w-10 rounded-full shadow-lg border-2 border-emerald-500" />
+                <h3 className="text-2xl font-serif font-extrabold tracking-tight">FreshMarket</h3>
+              </div>
+              <p className="text-stone-300 text-base max-w-xs">
                 Votre source de confiance pour des produits frais et des desserts marocains authentiques.
               </p>
+              {/* Réseaux sociaux */}
+              <div className="flex gap-4 mt-4">
+                <a href="#" aria-label="Facebook" className="hover:scale-110 transition-transform"><svg className="w-6 h-6 text-blue-400 hover:text-blue-600" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 4.991 3.657 9.128 8.438 9.877v-6.987h-2.54v-2.89h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.242 0-1.632.771-1.632 1.562v1.875h2.773l-.443 2.89h-2.33v6.987C18.343 21.128 22 16.991 22 12z"/></svg></a>
+                <a href="#" aria-label="Instagram" className="hover:scale-110 transition-transform"><svg className="w-6 h-6 text-pink-400 hover:text-pink-600" fill="currentColor" viewBox="0 0 24 24"><path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5A4.25 4.25 0 0 0 20.5 16.25v-8.5A4.25 4.25 0 0 0 16.25 3.5zm4.25 2.25a6.25 6.25 0 1 1 0 12.5 6.25 6.25 0 0 1 0-12.5zm0 1.5a4.75 4.75 0 1 0 0 9.5 4.75 4.75 0 0 0 0-9.5zm6.25 1.25a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg></a>
+                <a href="#" aria-label="WhatsApp" className="hover:scale-110 transition-transform"><svg className="w-6 h-6 text-green-400 hover:text-green-600" fill="currentColor" viewBox="0 0 24 24"><path d="M20.52 3.48A12.07 12.07 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.12.55 4.18 1.6 6.01L0 24l6.18-1.62A11.93 11.93 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.21-3.48-8.52zM12 22c-1.7 0-3.36-.33-4.92-.98l-.35-.15-3.67.96.98-3.57-.18-.36A9.94 9.94 0 0 1 2 12c0-5.52 4.48-10 10-10s10 4.48 10 10-4.48 10-10 10zm5.2-7.8c-.28-.14-1.65-.81-1.9-.9-.25-.09-.43-.14-.61.14-.18.28-.7.9-.86 1.08-.16.18-.32.2-.6.07-.28-.14-1.18-.44-2.25-1.4-.83-.74-1.39-1.65-1.55-1.93-.16-.28-.02-.43.12-.57.13-.13.28-.34.42-.51.14-.17.18-.29.28-.48.09-.19.05-.36-.02-.5-.07-.14-.61-1.47-.84-2.01-.22-.53-.45-.46-.62-.47-.16-.01-.36-.01-.56-.01-.19 0-.5.07-.76.34-.26.27-1 1-.98 2.44.02 1.44 1.02 2.84 1.16 3.04.14.2 2.01 3.08 4.88 4.2.68.29 1.21.46 1.62.59.68.22 1.3.19 1.79.12.55-.08 1.65-.67 1.89-1.32.23-.65.23-1.2.16-1.32-.07-.12-.25-.19-.53-.33z"/></svg></a>
+              </div>
             </div>
-            <div>
-              <h4 className="font-bold mb-3 sm:mb-4 text-base sm:text-lg">Contact</h4>
-              <div className="space-y-2 text-stone-300 text-sm sm:text-base">
-                <div className="flex items-center justify-center md:justify-start">
-                  <Phone className="w-4 h-4 mr-2" />
+            {/* Bloc contact */}
+            <div className="flex-1 mb-6 md:mb-0">
+              <h4 className="text-lg font-bold flex items-center gap-2 mb-3"><Phone className="w-5 h-5 text-emerald-400" /> Contact</h4>
+              <div className="space-y-2 text-stone-300 text-base">
+                <div className="flex items-center justify-center md:justify-start gap-2">
+                  <Phone className="w-4 h-4 mr-1 text-emerald-400" />
                   <span>+212 6 00 00 00 00</span>
                 </div>
-                <div className="flex items-center justify-center md:justify-start">
-                  <MapPin className="w-4 h-4 mr-2" />
+                <div className="flex items-center justify-center md:justify-start gap-2">
+                  <MapPin className="w-4 h-4 mr-1 text-blue-400" />
                   <span>Marrakech , Maroc</span>
                 </div>
               </div>
             </div>
-            <div>
-              <h4 className="font-bold mb-3 sm:mb-4 text-base sm:text-lg">Horaires</h4>
-              <div className="text-stone-300 text-sm sm:text-base">
+            {/* Bloc horaires */}
+            <div className="flex-1">
+              <h4 className="text-lg font-bold flex items-center gap-2 mb-3"><svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1.75A10.25 10.25 0 1 0 22.25 12 10.26 10.26 0 0 0 12 1.75zm0 18.5A8.25 8.25 0 1 1 20.25 12 8.26 8.26 0 0 1 12 20.25zm.62-13.5h-1.25v5.13l4.44 2.64.62-1.03-3.81-2.26z"/></svg> Horaires</h4>
+              <div className="text-stone-300 text-base">
                 <p>Lun - Sam: 8h00 - 20h00</p>
                 <p>Dimanche: 9h00 - 18h00</p>
               </div>
             </div>
           </div>
-          <div className="border-t border-stone-700 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-stone-400 text-sm sm:text-base">
+          <div className="border-t border-stone-700/60 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-stone-400 text-sm sm:text-base flex flex-col items-center gap-2">
+            <div className="flex gap-3 justify-center mb-2">
+              <a href="#" aria-label="Facebook" className="hover:scale-110 transition-transform"><svg className="w-5 h-5 text-blue-400 hover:text-blue-600" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 4.991 3.657 9.128 8.438 9.877v-6.987h-2.54v-2.89h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.242 0-1.632.771-1.632 1.562v1.875h2.773l-.443 2.89h-2.33v6.987C18.343 21.128 22 16.991 22 12z"/></svg></a>
+              <a href="#" aria-label="Instagram" className="hover:scale-110 transition-transform"><svg className="w-5 h-5 text-pink-400 hover:text-pink-600" fill="currentColor" viewBox="0 0 24 24"><path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5A4.25 4.25 0 0 0 20.5 16.25v-8.5A4.25 4.25 0 0 0 16.25 3.5zm4.25 2.25a6.25 6.25 0 1 1 0 12.5 6.25 6.25 0 0 1 0-12.5zm0 1.5a4.75 4.75 0 1 0 0 9.5 4.75 4.75 0 0 0 0-9.5zm6.25 1.25a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg></a>
+              <a href="#" aria-label="WhatsApp" className="hover:scale-110 transition-transform"><svg className="w-5 h-5 text-green-400 hover:text-green-600" fill="currentColor" viewBox="0 0 24 24"><path d="M20.52 3.48A12.07 12.07 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.12.55 4.18 1.6 6.01L0 24l6.18-1.62A11.93 11.93 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.21-3.48-8.52zM12 22c-1.7 0-3.36-.33-4.92-.98l-.35-.15-3.67.96.98-3.57-.18-.36A9.94 9.94 0 0 1 2 12c0-5.52 4.48-10 10-10s10 4.48 10 10-4.48 10-10 10zm5.2-7.8c-.28-.14-1.65-.81-1.9-.9-.25-.09-.43-.14-.61.14-.18.28-.7.9-.86 1.08-.16.18-.32.2-.6.07-.28-.14-1.18-.44-2.25-1.4-.83-.74-1.39-1.65-1.55-1.93-.16-.28-.02-.43.12-.57.13-.13.28-.34.42-.51.14-.17.18-.29.28-.48.09-.19.05-.36-.02-.5-.07-.14-.61-1.47-.84-2.01-.22-.53-.45-.46-.62-.47-.16-.01-.36-.01-.56-.01-.19 0-.5.07-.76.34-.26.27-1 1-.98 2.44.02 1.44 1.02 2.84 1.16 3.04.14.2 2.01 3.08 4.88 4.2.68.29 1.21.46 1.62.59.68.22 1.3.19 1.79.12.55-.08 1.65-.67 1.89-1.32.23-.65.23-1.2.16-1.32-.07-.12-.25-.19-.53-.33z"/></svg></a>
+            </div>
             <p>&copy; 2024 FreshMarket. Tous droits réservés.</p>
           </div>
         </div>

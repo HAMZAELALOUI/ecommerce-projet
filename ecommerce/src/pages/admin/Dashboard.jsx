@@ -91,23 +91,23 @@ const Dashboard = () => {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6 ml-0 md:ml-12 px-2 sm:px-6">
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-                    <p className="text-muted-foreground">
+                    <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Dashboard</h1>
+                    <p className="text-sm sm:text-base text-muted-foreground">
                         Welcome back! Here's what's happening with your store today.
                     </p>
                 </div>
-                <Button className="flex items-center gap-2">
+                <Button className="flex items-center gap-2 w-full sm:w-auto">
                     <Plus className="h-4 w-4" />
-                    Add Product
+                    <span className="text-sm sm:text-base">Add Product</span>
                 </Button>
             </div>
 
             {/* Stats Cards */}
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <StatCard
                     title="Total Revenue"
                     value={`$${stats.totalRevenue.toLocaleString()}`}
@@ -139,17 +139,17 @@ const Dashboard = () => {
             </div>
 
             {/* Charts Row */}
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
                 {/* Monthly Revenue Chart */}
                 <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <TrendingUp className="h-5 w-5" />
+                        <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                            <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
                             Monthly Revenue & Orders
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <ResponsiveContainer width="100%" height={300}>
+                        <ResponsiveContainer width="100%" height={250} className="sm:h-[300px]">
                             <LineChart data={stats.monthlyData}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="month" />
@@ -186,13 +186,13 @@ const Dashboard = () => {
                 {/* Category Distribution */}
                 <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <Package className="h-5 w-5" />
+                        <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                            <Package className="h-4 w-4 sm:h-5 sm:w-5" />
                             Category Distribution
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <ResponsiveContainer width="100%" height={300}>
+                        <ResponsiveContainer width="100%" height={250} className="sm:h-[300px]">
                             <PieChart>
                                 <Pie
                                     data={stats.categoryDistribution}
@@ -200,7 +200,8 @@ const Dashboard = () => {
                                     cy="50%"
                                     labelLine={false}
                                     label={({ name, percentage }) => `${name} (${percentage}%)`}
-                                    outerRadius={80}
+                                    outerRadius={60}
+                                    className="sm:outerRadius={80}"
                                     fill="#8884d8"
                                     dataKey="count"
                                 >
@@ -216,31 +217,31 @@ const Dashboard = () => {
             </div>
 
             {/* Bottom Row */}
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
                 {/* Recent Products */}
                 <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <Activity className="h-5 w-5" />
+                        <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                            <Activity className="h-4 w-4 sm:h-5 sm:w-5" />
                             Recent Products
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="space-y-4">
+                        <div className="space-y-3 sm:space-y-4">
                             {stats.recentProducts.map((product, index) => (
-                                <div key={product.id || index} className="flex items-center justify-between p-3 border rounded-lg">
-                                    <div className="flex items-center space-x-3">
-                                        <div className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center">
-                                            <Package className="h-5 w-5 text-gray-500" />
+                                <div key={product.id || index} className="flex items-center justify-between p-2 sm:p-3 border rounded-lg">
+                                    <div className="flex items-center space-x-2 sm:space-x-3">
+                                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gray-200 rounded-lg flex items-center justify-center">
+                                            <Package className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />
                                         </div>
-                                        <div>
-                                            <p className="font-medium">{product.name}</p>
-                                            <p className="text-sm text-muted-foreground">
+                                        <div className="min-w-0 flex-1">
+                                            <p className="font-medium text-sm sm:text-base truncate">{product.name}</p>
+                                            <p className="text-xs sm:text-sm text-muted-foreground">
                                                 ${product.price || '0.00'}
                                             </p>
                                         </div>
                                     </div>
-                                    <Badge variant="secondary">
+                                    <Badge variant="secondary" className="text-xs">
                                         {product.category_name || 'Uncategorized'}
                                     </Badge>
                                 </div>
@@ -252,24 +253,24 @@ const Dashboard = () => {
                 {/* Top Categories */}
                 <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <TrendingUp className="h-5 w-5" />
+                        <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                            <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
                             Top Categories
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="space-y-4">
+                        <div className="space-y-3 sm:space-y-4">
                             {stats.topCategories.map((category, index) => (
-                                <div key={category.name} className="space-y-2">
+                                <div key={category.name} className="space-y-1 sm:space-y-2">
                                     <div className="flex items-center justify-between">
-                                        <span className="text-sm font-medium">{category.name}</span>
-                                        <span className="text-sm text-muted-foreground">
+                                        <span className="text-xs sm:text-sm font-medium truncate">{category.name}</span>
+                                        <span className="text-xs sm:text-sm text-muted-foreground">
                                             {category.count} products
                                         </span>
                                     </div>
                                     <Progress 
                                         value={category.percentage} 
-                                        className="h-2"
+                                        className="h-1 sm:h-2"
                                     />
                                 </div>
                             ))}
@@ -281,21 +282,21 @@ const Dashboard = () => {
             {/* Quick Actions */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Quick Actions</CardTitle>
+                    <CardTitle className="text-base sm:text-lg">Quick Actions</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="grid gap-4 md:grid-cols-3">
-                        <Button variant="outline" className="h-20 flex flex-col gap-2">
-                            <Plus className="h-6 w-6" />
-                            <span>Add New Product</span>
+                    <div className="grid gap-3 sm:gap-4 md:grid-cols-3">
+                        <Button variant="outline" className="h-16 sm:h-20 flex flex-col gap-1 sm:gap-2">
+                            <Plus className="h-5 w-5 sm:h-6 sm:w-6" />
+                            <span className="text-xs sm:text-sm">Add New Product</span>
                         </Button>
-                        <Button variant="outline" className="h-20 flex flex-col gap-2">
-                            <Package className="h-6 w-6" />
-                            <span>Manage Categories</span>
+                        <Button variant="outline" className="h-16 sm:h-20 flex flex-col gap-1 sm:gap-2">
+                            <Package className="h-5 w-5 sm:h-6 sm:w-6" />
+                            <span className="text-xs sm:text-sm">Manage Categories</span>
                         </Button>
-                        <Button variant="outline" className="h-20 flex flex-col gap-2">
-                            <Eye className="h-6 w-6" />
-                            <span>View Analytics</span>
+                        <Button variant="outline" className="h-16 sm:h-20 flex flex-col gap-1 sm:gap-2">
+                            <Eye className="h-5 w-5 sm:h-6 sm:w-6" />
+                            <span className="text-xs sm:text-sm">View Analytics</span>
                         </Button>
                     </div>
                 </CardContent>

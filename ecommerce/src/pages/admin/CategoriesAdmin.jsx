@@ -90,7 +90,7 @@ const CategoriesAdmin = () => {
   }
 
   return (
-    <div className="space-y-6 sm:space-y-8 p-3 sm:p-4 md:p-8 bg-gray-50 min-h-screen">
+    <div className="space-y-6 sm:space-y-8 p-3 sm:p-4 md:p-8 bg-gray-50 min-h-screen ml-0 md:ml-12 px-2 sm:px-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
