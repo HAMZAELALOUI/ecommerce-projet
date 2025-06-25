@@ -178,57 +178,57 @@ const ProductsAdmin = () => {
   }
 
   return (
-    <div className="space-y-8 p-4 md:p-8 bg-gray-50 min-h-screen">
+    <div className="space-y-6 sm:space-y-8 p-3 sm:p-4 md:p-8 bg-gray-50 min-h-screen">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-800">Products Management</h1>
-          <p className="text-gray-500">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-800">Products Management</h1>
+          <p className="text-sm sm:text-base text-gray-500">
             Manage your product catalog and inventory
           </p>
         </div>
-        <Button onClick={handleAdd} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm hover:shadow-md transition-all">
-          <PlusCircle className="h-5 w-5" />
-          Add Product
+        <Button onClick={handleAdd} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm hover:shadow-md transition-all w-full sm:w-auto">
+          <PlusCircle className="h-4 w-4 sm:h-5 sm:w-5" />
+          <span className="text-sm sm:text-base">Add Product</span>
         </Button>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500">Total Products</CardTitle>
+            <CardTitle className="text-xs sm:text-sm font-medium text-gray-500">Total Products</CardTitle>
             <Package className="h-4 w-4 text-gray-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.total}</div>
+            <div className="text-xl sm:text-2xl font-bold">{stats.total}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500">In Stock</CardTitle>
+            <CardTitle className="text-xs sm:text-sm font-medium text-gray-500">In Stock</CardTitle>
             <CheckCircle className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{stats.inStock}</div>
+            <div className="text-xl sm:text-2xl font-bold text-green-600">{stats.inStock}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500">Low Stock</CardTitle>
+            <CardTitle className="text-xs sm:text-sm font-medium text-gray-500">Low Stock</CardTitle>
             <AlertTriangle className="h-4 w-4 text-yellow-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{stats.lowStock}</div>
+            <div className="text-xl sm:text-2xl font-bold text-yellow-600">{stats.lowStock}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500">Out of Stock</CardTitle>
+            <CardTitle className="text-xs sm:text-sm font-medium text-gray-500">Out of Stock</CardTitle>
             <XCircle className="h-4 w-4 text-red-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{stats.outOfStock}</div>
+            <div className="text-xl sm:text-2xl font-bold text-red-600">{stats.outOfStock}</div>
           </CardContent>
         </Card>
       </div>
@@ -236,24 +236,24 @@ const ProductsAdmin = () => {
       {/* Filters & Table */}
       <Card className="shadow-md rounded-xl">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-gray-700">
-            <Filter className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-gray-700 text-lg sm:text-xl">
+            <Filter className="h-4 w-4 sm:h-5 sm:w-5" />
             Product List
           </CardTitle>
-          <div className="flex gap-4 pt-4 flex-col md:flex-row">
+          <div className="flex gap-3 sm:gap-4 pt-4 flex-col sm:flex-row">
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
                 <Input
                   placeholder="Search by name or description..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 rounded-lg"
+                  className="pl-10 rounded-lg text-sm sm:text-base"
                 />
               </div>
             </div>
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger className="w-full md:w-[240px] rounded-lg">
+              <SelectTrigger className="w-full sm:w-[240px] rounded-lg">
                 <SelectValue placeholder="Filter by Category" />
               </SelectTrigger>
               <SelectContent>
@@ -268,59 +268,61 @@ const ProductsAdmin = () => {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="rounded-lg border">
+          <div className="rounded-lg border overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[40%]">Product</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Stock</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="w-[40%] text-xs sm:text-sm">Product</TableHead>
+                  <TableHead className="text-xs sm:text-sm">Category</TableHead>
+                  <TableHead className="text-xs sm:text-sm">Price</TableHead>
+                  <TableHead className="text-xs sm:text-sm">Stock</TableHead>
+                  <TableHead className="text-xs sm:text-sm">Status</TableHead>
+                  <TableHead className="text-right text-xs sm:text-sm">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredProducts.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-12 text-gray-500">
-                      <Package className="h-12 w-12 mx-auto text-gray-300 mb-2" />
-                      No products found
+                    <TableCell colSpan={6} className="text-center py-8 sm:py-12 text-gray-500">
+                      <Package className="h-8 w-8 sm:h-12 sm:w-12 mx-auto text-gray-300 mb-2" />
+                      <p className="text-sm sm:text-base">No products found</p>
                     </TableCell>
                   </TableRow>
                 ) : (
                   filteredProducts.map((product) => (
                     <TableRow key={product.id} className="hover:bg-gray-50 transition-colors">
                       <TableCell>
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-2 sm:space-x-4">
                            <img 
                               src={getProductImage(product.name)} 
                               alt={product.name} 
-                              className="w-12 h-12 object-cover rounded-lg shadow-sm"
+                              className="w-8 h-8 sm:w-12 sm:h-12 object-cover rounded-lg shadow-sm"
                            />
-                          <div>
-                            <p className="font-semibold text-gray-800">{product.name}</p>
-                            <p className="text-sm text-gray-500 truncate max-w-[250px]">
+                          <div className="min-w-0 flex-1">
+                            <p className="font-semibold text-gray-800 text-xs sm:text-sm truncate">{product.name}</p>
+                            <p className="text-xs text-gray-500 truncate max-w-[200px] sm:max-w-[250px]">
                               {product.description || 'No description'}
                             </p>
                           </div>
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge variant="outline">{product.category_name || 'Uncategorized'}</Badge>
+                        <Badge variant="outline" className="text-xs">
+                          {product.category_name || 'Uncategorized'}
+                        </Badge>
                       </TableCell>
-                      <TableCell className="font-semibold text-gray-700">
+                      <TableCell className="font-semibold text-gray-700 text-xs sm:text-sm">
                         ${product.price ? parseFloat(product.price).toFixed(2) : '0.00'}
                       </TableCell>
-                      <TableCell className="font-medium">{product.stock || 0}</TableCell>
+                      <TableCell className="font-medium text-xs sm:text-sm">{product.stock || 0}</TableCell>
                       <TableCell>{getStatusBadge(product)}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end space-x-1">
-                          <Button variant="ghost" size="icon" className="hover:bg-gray-200 rounded-full" onClick={() => handleEdit(product)}>
-                            <Edit className="h-4 w-4 text-gray-600" />
+                          <Button variant="ghost" size="icon" className="hover:bg-gray-200 rounded-full h-8 w-8 sm:h-10 sm:w-10" onClick={() => handleEdit(product)}>
+                            <Edit className="h-3 w-3 sm:h-4 sm:w-4 text-gray-600" />
                           </Button>
-                          <Button variant="ghost" size="icon" className="hover:bg-red-100 rounded-full" onClick={() => handleDelete(product.id)}>
-                            <Trash2 className="h-4 w-4 text-red-500" />
+                          <Button variant="ghost" size="icon" className="hover:bg-red-100 rounded-full h-8 w-8 sm:h-10 sm:w-10" onClick={() => handleDelete(product.id)}>
+                            <Trash2 className="h-3 w-3 sm:h-4 sm:w-4 text-red-500" />
                           </Button>
                         </div>
                       </TableCell>

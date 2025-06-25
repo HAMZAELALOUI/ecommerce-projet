@@ -161,57 +161,57 @@ function PacksPage() {
       viewport={{ once: true }}
       variants={packGridVariants}
       transition={{ duration: 0.7, type: 'spring', stiffness: 60 }}
-      className="container mx-auto px-4 py-16 min-h-[60vh]"
+      className="container mx-auto px-4 py-8 sm:py-12 md:py-16 min-h-[60vh]"
     >
       <motion.h2
         initial={{ opacity: 0, scale: 0.9 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.7, type: 'spring', stiffness: 60 }}
-        className="text-4xl md:text-5xl font-serif font-extrabold text-orange-600 mb-10 text-center tracking-tight drop-shadow-lg"
+        className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-extrabold text-orange-600 mb-6 sm:mb-8 md:mb-10 text-center tracking-tight drop-shadow-lg"
       >
         Nos Packs
       </motion.h2>
-      <div className="grid md:grid-cols-2 gap-10">
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10">
         {packs.map((pack, idx) => (
           <motion.div
             key={pack.name}
             variants={packCardVariants}
             className="flex h-full"
           >
-            <Card className="flex flex-col flex-1 min-h-[520px] h-full shadow-xl rounded-2xl overflow-hidden border bg-white/90">
-              <CardHeader className="bg-yellow-400/80 text-center py-6">
-                <CardTitle className="text-3xl md:text-4xl font-serif font-bold text-orange-700 tracking-wide drop-shadow-sm">
+            <Card className="flex flex-col flex-1 min-h-[480px] sm:min-h-[520px] h-full shadow-xl rounded-2xl overflow-hidden border bg-white/90">
+              <CardHeader className="bg-yellow-400/80 text-center py-4 sm:py-6">
+                <CardTitle className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-serif font-bold text-orange-700 tracking-wide drop-shadow-sm">
                   {pack.name}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
+              <CardContent className="p-4 sm:p-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 flex-1">
                   <div>
-                    <h3 className="text-xl font-serif font-semibold text-yellow-600 mb-2">Fruits</h3>
-                    <ul className="space-y-2">
+                    <h3 className="text-lg sm:text-xl font-serif font-semibold text-yellow-600 mb-2">Fruits</h3>
+                    <ul className="space-y-1 sm:space-y-2">
                       {pack.fruits.map((item, i) => (
-                        <li key={i} className="flex items-center gap-2 text-lg font-medium text-gray-800">
-                          {item.image ? <img src={item.image} alt={item.label} className="w-6 h-6 rounded-full object-cover" /> : <span className="text-2xl">{item.emoji}</span>}
-                          <span className="font-serif">{item.label} : <span className="font-bold font-sans text-black">{item.qty}</span></span>
+                        <li key={i} className="flex items-center gap-2 text-sm sm:text-lg font-medium text-gray-800">
+                          {item.image ? <img src={item.image} alt={item.label} className="w-5 h-5 sm:w-6 sm:h-6 rounded-full object-cover" /> : <span className="text-xl sm:text-2xl">{item.emoji}</span>}
+                          <span className="font-serif text-sm sm:text-base">{item.label} : <span className="font-bold font-sans text-black">{item.qty}</span></span>
                         </li>
                       ))}
                     </ul>
                   </div>
                   <div>
-                    <h3 className="text-xl font-serif font-semibold text-yellow-600 mb-2">Légumes</h3>
-                    <ul className="space-y-2">
+                    <h3 className="text-lg sm:text-xl font-serif font-semibold text-yellow-600 mb-2">Légumes</h3>
+                    <ul className="space-y-1 sm:space-y-2">
                       {pack.legumes.map((item, i) => (
-                        <li key={i} className="flex items-center gap-2 text-lg font-medium text-gray-800">
-                          {item.image ? <img src={item.image} alt={item.label} className="w-6 h-6 rounded-full object-cover" /> : <span className="text-2xl">{item.emoji}</span>}
-                          <span className="font-serif">{item.label} : <span className="font-bold font-sans text-black">{item.qty}</span></span>
+                        <li key={i} className="flex items-center gap-2 text-sm sm:text-lg font-medium text-gray-800">
+                          {item.image ? <img src={item.image} alt={item.label} className="w-5 h-5 sm:w-6 sm:h-6 rounded-full object-cover" /> : <span className="text-xl sm:text-2xl">{item.emoji}</span>}
+                          <span className="font-serif text-sm sm:text-base">{item.label} : <span className="font-bold font-sans text-black">{item.qty}</span></span>
                         </li>
                       ))}
                     </ul>
                   </div>
                 </div>
-                <div className="mt-8 text-center">
-                  <div className="bg-yellow-300 text-orange-800 font-bold text-lg rounded-lg py-3 px-6 inline-block shadow-md animate-pulse font-serif tracking-wide">
+                <div className="mt-6 sm:mt-8 text-center">
+                  <div className="bg-yellow-300 text-orange-800 font-bold text-sm sm:text-lg rounded-lg py-2 sm:py-3 px-4 sm:px-6 inline-block shadow-md animate-pulse font-serif tracking-wide">
                     {pack.highlight}
                   </div>
                 </div>
@@ -295,6 +295,7 @@ function App() {
   const [isChatOpen, setIsChatOpen] = useState(false)
   const histoireRef = useRef(null)
   const [productTypeFilter, setProductTypeFilter] = useState('all'); // 'all', 'fruits', 'legumes'
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const API_BASE_URL = 'http://localhost:8000';
 
@@ -442,41 +443,107 @@ function App() {
     <motion.div className="min-h-screen bg-white">
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm shadow-sm z-40">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div className="container mx-auto px-4 py-2 sm:py-3 flex justify-between items-center">
           <Link to="/" className="flex items-center space-x-2">
-            <img src={logoImg} alt="FreshMarket Logo" className="h-12 w-12 rounded-full" />
-            <span className="text-xl font-bold font-serif text-stone-800">FreshMarket</span>
+            <img src={logoImg} alt="FreshMarket Logo" className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 rounded-full" />
+            <span className="text-lg sm:text-xl font-bold font-serif text-stone-800">FreshMarket</span>
           </Link>
-          <nav className="hidden md:flex items-center space-x-8">
+          
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8">
             <NavLink to="/" className={({isActive}) => isActive ? "text-emerald-600 font-bold" : "text-gray-600 hover:text-emerald-600 transition-colors"}>Accueil</NavLink>
-            
             <a href="#histoire" onClick={scrollToHistoire} className="text-gray-600 hover:text-emerald-600 transition-colors">Notre Histoire</a>
             <NavLink to="/#products" className="text-gray-600 hover:text-emerald-600 transition-colors">Produits</NavLink>
             <NavLink to="/#packs" className="text-gray-600 hover:text-emerald-600 transition-colors">Nos Packs</NavLink>
             <NavLink to="/admin" className="text-gray-600 hover:text-emerald-600 transition-colors">Admin</NavLink>
           </nav>
-          <div className="flex items-center space-x-4">
+
+          {/* Mobile Menu Button */}
+          <div className="lg:hidden">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </Button>
+          </div>
+
+          <div className="flex items-center space-x-2 sm:space-x-4">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setIsCartOpen(true)}
-              className="relative hover:bg-emerald-50 rounded-full"
+              className="relative hover:bg-emerald-50 rounded-full p-2 sm:p-3"
             >
-              <ShoppingCart className="w-6 h-6 text-stone-700" />
+              <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6 text-stone-700" />
               {cart.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center">
                   {cart.length}
                 </span>
               )}
             </Button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="lg:hidden bg-white/95 backdrop-blur-sm border-t border-gray-200"
+            >
+              <nav className="container mx-auto px-4 py-4 space-y-3">
+                <NavLink 
+                  to="/" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={({isActive}) => `block py-2 px-3 rounded-lg transition-colors ${isActive ? "bg-emerald-100 text-emerald-600 font-bold" : "text-gray-600 hover:bg-gray-100"}`}
+                >
+                  Accueil
+                </NavLink>
+                <a 
+                  href="#histoire" 
+                  onClick={(e) => { scrollToHistoire(e); setIsMobileMenuOpen(false); }}
+                  className="block py-2 px-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+                >
+                  Notre Histoire
+                </a>
+                <NavLink 
+                  to="/#products" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block py-2 px-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+                >
+                  Produits
+                </NavLink>
+                <NavLink 
+                  to="/#packs" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block py-2 px-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+                >
+                  Nos Packs
+                </NavLink>
+                <NavLink 
+                  to="/admin" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block py-2 px-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+                >
+                  Admin
+                </NavLink>
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       {/* Main Content */}
-      <main className="pt-20 bg-stone-50">
+      <main className="pt-16 sm:pt-20 bg-stone-50">
         {/* Hero Section */}
-        <section className="relative h-[calc(100vh-88px)] flex items-center justify-center overflow-hidden">
+        <section className="relative h-[calc(100vh-64px)] sm:h-[calc(100vh-88px)] flex items-center justify-center overflow-hidden">
           <motion.div
             initial={{ opacity: 0, scale: 1.1 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -495,27 +562,48 @@ function App() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
-            className="relative z-10 text-center text-white px-4"
+            className="relative z-10 text-center text-white px-4 sm:px-6"
           >
-            <h1 className="text-5xl md:text-7xl font-serif font-bold mb-6 drop-shadow-lg">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-serif font-bold mb-4 sm:mb-6 drop-shadow-lg">
               FreshMarket
             </h1>
-            <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto drop-shadow-md">
+            <p className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 max-w-2xl mx-auto drop-shadow-md px-4">
               La fraîcheur de la nature, livrée à votre porte. Goûtez la différence.
             </p>
             <motion.a
               href="#products"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-10 py-4 rounded-full text-lg font-semibold transition-all shadow-lg hover:shadow-xl"
+              className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold transition-all shadow-lg hover:shadow-xl"
             >
               Découvrir nos Produits
             </motion.a>
           </motion.div>
-        </section>  {/* Histoire Section */}
-        <section id="histoire" ref={histoireRef} className="py-24 bg-white">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        </section>
+
+        {/* Histoire Section */}
+        <section id="histoire" ref={histoireRef} className="py-12 sm:py-16 md:py-20 lg:py-24 bg-white">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
+             
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                viewport={{ once: true }}
+              >
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-serif text-stone-800 mb-4 sm:mb-6">Notre Histoire</h2>
+                <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 leading-relaxed">
+                  Depuis plus de 20 ans, FreshMarket s'engage à vous offrir les meilleurs produits frais et les desserts marocains les plus authentiques. Notre passion pour la qualité et le service client nous pousse à sélectionner avec soin chaque produit.
+                </p>
+                <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 leading-relaxed">
+                  Nous travaillons directement avec les producteurs locaux pour garantir la fraîcheur et la qualité de nos fruits et légumes. Nos desserts sont préparés selon les recettes traditionnelles marocaines, transmises de génération en génération.
+                </p>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-6 sm:mt-8">
+                 
+                
+                </div>
+              </motion.div>
               <motion.div
                 initial={{ opacity: 0, scale: 0.95, x: -30 }}
                 whileInView={{ opacity: 1, scale: 1, x: 0 }}
@@ -528,80 +616,58 @@ function App() {
                   className="w-full h-auto max-h-[500px] object-cover rounded-2xl shadow-xl"
                 />
               </motion.div>
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                viewport={{ once: true }}
-              >
-                <h2 className="text-4xl font-bold font-serif text-stone-800 mb-6">Notre Histoire</h2>
-                <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                  Depuis plus de 20 ans, FreshMarket s'engage à vous offrir les meilleurs produits frais et les desserts marocains les plus authentiques. Notre passion pour la qualité et le service client nous pousse à sélectionner avec soin chaque produit.
-                </p>
-                <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                  Nous travaillons directement avec les producteurs locaux pour garantir la fraîcheur et la qualité de nos fruits et légumes. Nos desserts sont préparés selon les recettes traditionnelles marocaines, transmises de génération en génération.
-                </p>
-                <div className="flex items-center space-x-6 mt-8">
-                  <div className="flex items-center">
-                    <Star className="w-6 h-6 text-yellow-400 mr-2" />
-                    <span className="font-semibold text-lg">4.9/5</span>
-                  </div>
-                  <div className="flex items-center text-gray-600 text-lg">
-                    <span>+1000 clients satisfaits</span>
-                  </div>
-                </div>
-              </motion.div>
             </div>
           </div>
         </section>
 
-    
-
         {/* Products Section */}
-        <section id="products" className="py-24 bg-white">
-          <div className="container mx-auto px-4">
+        <section id="products" className="py-12 sm:py-16 md:py-20 lg:py-24 bg-white">
+          <div className="container mx-auto px-4 sm:px-6">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="text-center mb-12"
+              className="text-center mb-8 sm:mb-12"
             >
               <motion.h2
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, type: 'spring', stiffness: 60 }}
-                className="text-4xl md:text-5xl font-serif font-extrabold text-orange-600 mb-10 text-center tracking-tight drop-shadow-lg"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-extrabold text-orange-600 mb-6 sm:mb-8 md:mb-10 text-center tracking-tight drop-shadow-lg"
               >
                 Nos Trésors Naturels
               </motion.h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
                 Chaque produit est une promesse de fraîcheur et de qualité, directement du producteur à votre table.
               </p>
             </motion.div>
 
             {/* Category Filter */}
-            <div className="flex flex-wrap justify-center gap-3 mb-10">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10">
               <Button
                 onClick={() => setProductTypeFilter('all')}
                 variant={productTypeFilter === 'all' ? 'default' : 'outline'}
-                className={productTypeFilter === 'all' ? 'bg-emerald-600 text-white shadow-md' : 'bg-white border-stone-300 text-stone-700 hover:bg-stone-100 hover:border-emerald-500'}
+                size="sm"
+                className={`${productTypeFilter === 'all' ? 'bg-emerald-600 text-white shadow-md' : 'bg-white border-stone-300 text-stone-700 hover:bg-stone-100 hover:border-emerald-500'} text-xs sm:text-sm`}
               >
                 Tous les Produits
               </Button>
               <Button
                 onClick={() => setProductTypeFilter('fruits')}
                 variant={productTypeFilter === 'fruits' ? 'default' : 'outline'}
-                className={productTypeFilter === 'fruits' ? 'bg-orange-500 text-white shadow-md' : 'bg-white border-stone-300 text-stone-700 hover:bg-stone-100 hover:border-orange-400'}
+                size="sm"
+                className={`${productTypeFilter === 'fruits' ? 'bg-orange-500 text-white shadow-md' : 'bg-white border-stone-300 text-stone-700 hover:bg-stone-100 hover:border-orange-400'} text-xs sm:text-sm`}
               >
-                <span className="mr-2">🍎</span> Fruits
+                <span className="mr-1 sm:mr-2">🍎</span> Fruits
               </Button>
               <Button
                 onClick={() => setProductTypeFilter('legumes')}
                 variant={productTypeFilter === 'legumes' ? 'default' : 'outline'}
-                className={productTypeFilter === 'legumes' ? 'bg-green-600 text-white shadow-md' : 'bg-white border-stone-300 text-stone-700 hover:bg-stone-100 hover:border-green-400'}
+                size="sm"
+                className={`${productTypeFilter === 'legumes' ? 'bg-green-600 text-white shadow-md' : 'bg-white border-stone-300 text-stone-700 hover:bg-stone-100 hover:border-green-400'} text-xs sm:text-sm`}
               >
-                <span className="mr-2">🥕</span> Légumes
+                <span className="mr-1 sm:mr-2">🥕</span> Légumes
               </Button>
             </div>
 
@@ -611,7 +677,7 @@ function App() {
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.4 }}
               viewport={{ once: true }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
             >
               {filteredProducts
                 .map((product, index) => (
@@ -632,28 +698,28 @@ function App() {
                         <motion.img
                           src={getProductImage(product.name)}
                           alt={product.name}
-                          className="w-full h-48 object-cover transition-transform"
+                          className="w-full h-40 sm:h-48 object-cover transition-transform"
                           initial={{ opacity: 0, scale: 0.95 }}
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{ duration: 0.7, delay: index * 0.08 }}
                           whileHover={{ scale: 1.12 }}
                         />
-                        <Badge className="absolute top-2 right-2 bg-green-600">
+                        <Badge className="absolute top-2 right-2 bg-green-600 text-xs">
                           {product.price} MAD/{product.unit}
                         </Badge>
                       </motion.div>
                     </CardHeader>
-                    <CardContent className="p-5">
-                      <CardTitle className="text-lg font-serif mb-2 text-stone-800">{product.name}</CardTitle>
-                      <CardDescription className="mb-4 text-sm">{product.description}</CardDescription>
+                    <CardContent className="p-3 sm:p-5">
+                      <CardTitle className="text-base sm:text-lg font-serif mb-2 text-stone-800">{product.name}</CardTitle>
+                      <CardDescription className="mb-3 sm:mb-4 text-xs sm:text-sm">{product.description}</CardDescription>
                       <div className="flex items-center justify-between">
-                        <span className="text-xl font-bold text-emerald-600">{product.price} MAD</span>
+                        <span className="text-lg sm:text-xl font-bold text-emerald-600">{product.price} MAD</span>
                         <Button
                           onClick={() => addToCart(product)}
                           size="sm"
-                          className="bg-emerald-100 text-emerald-700 hover:bg-emerald-600 hover:text-white rounded-full transition-all"
+                          className="bg-emerald-100 text-emerald-700 hover:bg-emerald-600 hover:text-white rounded-full transition-all text-xs"
                         >
-                          <Plus className="w-4 h-4 mr-1" />
+                          <Plus className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                           Ajouter
                         </Button>
                       </div>
@@ -665,17 +731,17 @@ function App() {
         </section>
 
         {/* Packs Section */}
-        <section id="packs" className="py-24 bg-stone-50">
-          <div className="container mx-auto px-4">
+        <section id="packs" className="py-12 sm:py-16 md:py-20 lg:py-24 bg-stone-50">
+          <div className="container mx-auto px-4 sm:px-6">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="text-center mb-12"
+              className="text-center mb-8 sm:mb-12"
             >
-              <h2 className="text-4xl font-bold font-serif text-stone-800 mb-4">Nos Packs Composés</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-serif text-stone-800 mb-4">Nos Packs Composés</h2>
+              <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
                 Des combinaisons parfaites de fruits et légumes pour simplifier votre quotidien avec gourmandise.
               </p>
             </motion.div>
@@ -685,7 +751,7 @@ function App() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
             >
               {packs.map((pack, index) => (
                 <motion.div
@@ -697,26 +763,26 @@ function App() {
                   className="relative"
                 >
                   <Card className="h-full flex flex-col bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-200/80">
-                    <CardHeader className="text-center pb-4 pt-6">
+                    <CardHeader className="text-center pb-3 sm:pb-4 pt-4 sm:pt-6">
                       <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.7, delay: index * 0.12 }}
                       >
-                        <CardTitle className="text-2xl font-serif text-emerald-700">{pack.name}</CardTitle>
+                        <CardTitle className="text-lg sm:text-xl md:text-2xl font-serif text-emerald-700">{pack.name}</CardTitle>
                       </motion.div>
                     </CardHeader>
-                    <CardContent className="space-y-4 flex-grow">
+                    <CardContent className="space-y-3 sm:space-y-4 flex-grow p-3 sm:p-4">
                       {/* Fruits */}
                       <div>
-                        <h4 className="font-semibold text-stone-600 mb-3 flex items-center justify-center text-lg border-b pb-2">
-                          <span className="mr-2">🍎</span> Fruits
+                        <h4 className="font-semibold text-stone-600 mb-2 sm:mb-3 flex items-center justify-center text-sm sm:text-lg border-b pb-2">
+                          <span className="mr-1 sm:mr-2">🍎</span> Fruits
                         </h4>
-                        <div className="space-y-2 text-sm text-stone-700">
+                        <div className="space-y-1 sm:space-y-2 text-xs sm:text-sm text-stone-700">
                           {pack.fruits.map((fruit, fruitIndex) => (
-                            <div key={fruitIndex} className="flex justify-between items-center px-2">
+                            <div key={fruitIndex} className="flex justify-between items-center px-1 sm:px-2">
                               <span className="flex items-center">
-                                <span className="mr-2 text-xl">{fruit.emoji}</span>
+                                <span className="mr-1 sm:mr-2 text-lg sm:text-xl">{fruit.emoji}</span>
                                 {fruit.label}
                               </span>
                               <Badge variant="secondary" className="font-mono text-xs bg-stone-100 text-stone-800">
@@ -729,14 +795,14 @@ function App() {
 
                       {/* Légumes */}
                       <div>
-                        <h4 className="font-semibold text-stone-600 mb-3 flex items-center justify-center text-lg border-b pb-2">
-                          <span className="mr-2">🥕</span> Légumes
+                        <h4 className="font-semibold text-stone-600 mb-2 sm:mb-3 flex items-center justify-center text-sm sm:text-lg border-b pb-2">
+                          <span className="mr-1 sm:mr-2">🥕</span> Légumes
                         </h4>
-                        <div className="space-y-2 text-sm text-stone-700">
+                        <div className="space-y-1 sm:space-y-2 text-xs sm:text-sm text-stone-700">
                           {pack.legumes.map((legume, legumeIndex) => (
-                            <div key={legumeIndex} className="flex justify-between items-center px-2">
+                            <div key={legumeIndex} className="flex justify-between items-center px-1 sm:px-2">
                               <span className="flex items-center">
-                                <span className="mr-2 text-xl">{legume.emoji}</span>
+                                <span className="mr-1 sm:mr-2 text-lg sm:text-xl">{legume.emoji}</span>
                                 {legume.label}
                               </span>
                               <Badge variant="secondary" className="font-mono text-xs bg-stone-100 text-stone-800">
@@ -748,15 +814,15 @@ function App() {
                       </div>
 
                       {/* Highlight */}
-                      <div className="pt-4 mt-auto">
-                        <p className="text-xs text-emerald-700 font-semibold text-center bg-emerald-50 py-2 rounded-lg">
+                      <div className="pt-3 sm:pt-4 mt-auto">
+                        <p className="text-xs sm:text-sm text-emerald-700 font-semibold text-center bg-emerald-50 py-2 rounded-lg">
                           {pack.highlight}
                         </p>
                       </div>
                     </CardContent>
-                    <CardFooter className="p-4">
+                    <CardFooter className="p-3 sm:p-4">
                       <Button
-                        className="w-full bg-green-600 hover:bg-green-700 rounded-full py-3 text-lg font-bold shadow-lg transition-all mt-4"
+                        className="w-full bg-green-600 hover:bg-green-700 rounded-full py-2 sm:py-3 text-sm sm:text-lg font-bold shadow-lg transition-all mt-2 sm:mt-4"
                         onClick={() => addPackToCart(pack)}
                       >
                         Commander ce Pack
@@ -788,88 +854,88 @@ function App() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 h-full w-full max-w-md bg-white/60 backdrop-blur-md shadow-2xl z-50 flex flex-col"
+              className="fixed right-0 top-0 h-full w-full max-w-sm sm:max-w-md bg-white/60 backdrop-blur-md shadow-2xl z-50 flex flex-col"
             >
-              <div className="p-6 flex-shrink-0">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-2xl font-serif font-bold text-stone-800">Mon Panier</h3>
+              <div className="p-4 sm:p-6 flex-shrink-0">
+                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                  <h3 className="text-xl sm:text-2xl font-serif font-bold text-stone-800">Mon Panier</h3>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => setIsCartOpen(false)}
                     className="rounded-full hover:bg-stone-100"
                   >
-                    <X className="w-5 h-5 text-stone-600" />
+                    <X className="w-4 h-4 sm:w-5 sm:h-5 text-stone-600" />
                   </Button>
                 </div>
 
                 {cart.length === 0 ? (
                   <div className="text-center py-8">
-                    <ShoppingCart className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-                    <p className="text-gray-500">Votre panier est vide</p>
+                    <ShoppingCart className="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-gray-300 mb-4" />
+                    <p className="text-gray-500 text-sm sm:text-base">Votre panier est vide</p>
                   </div>
                 ) : (
                   <>
-                    <div className="space-y-4 mb-6 flex-grow overflow-y-auto px-1">
+                    <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6 flex-grow overflow-y-auto px-1">
                       {cart.map((item) => (
-                        <div key={item.id} className="flex items-center space-x-4 p-3 bg-white/40 backdrop-blur rounded-lg">
-                          <div className="flex space-x-2">
+                        <div key={item.id} className="flex items-center space-x-3 sm:space-x-4 p-2 sm:p-3 bg-white/40 backdrop-blur rounded-lg">
+                          <div className="flex space-x-1 sm:space-x-2">
                             <img
                               src={getProductImage(item.name)}
                               alt={item.name}
-                              className="w-14 h-14 object-cover rounded-md"
+                              className="w-10 h-10 sm:w-14 sm:h-14 object-cover rounded-md"
                             />
                             <img
                               src={getProductImage(item.name)}
                               alt={item.name + ' 2'}
-                              className="w-14 h-14 object-cover rounded-md"
+                              className="w-10 h-10 sm:w-14 sm:h-14 object-cover rounded-md"
                             />
                           </div>
-                          <div className="flex-1">
-                            <h4 className="font-medium text-stone-800">{item.name}</h4>
-                            <p className="text-sm text-gray-500">{item.price} MAD/{item.unit}</p>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-stone-800 text-sm sm:text-base truncate">{item.name}</h4>
+                            <p className="text-xs sm:text-sm text-gray-500">{item.price} MAD/{item.unit}</p>
                           </div>
-                          <div className="flex items-center space-x-2">
+                          <div className="flex items-center space-x-1 sm:space-x-2">
                             <Button
                               size="icon"
                               variant="outline"
                               onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                              className="w-8 h-8 rounded-full"
+                              className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
                             >
-                              <Minus className="w-4 h-4" />
+                              <Minus className="w-3 h-3 sm:w-4 sm:h-4" />
                             </Button>
-                            <span className="w-8 text-center text-md font-semibold">{item.quantity}</span>
+                            <span className="w-6 sm:w-8 text-center text-sm sm:text-md font-semibold">{item.quantity}</span>
                             <Button
                               size="icon"
                               variant="outline"
                               onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                              className="w-8 h-8 rounded-full"
+                              className="w-6 h-6 sm:w-8 sm:h-8 rounded-full"
                             >
-                              <Plus className="w-4 h-4" />
+                              <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
                             </Button>
                           </div>
                           <Button
                             size="icon"
                             variant="ghost"
                             onClick={() => removeFromCart(item.id)}
-                            className="text-stone-500 hover:text-red-500 hover:bg-red-100 rounded-full w-8 h-8"
+                            className="text-stone-500 hover:text-red-500 hover:bg-red-100 rounded-full w-6 h-6 sm:w-8 sm:h-8"
                           >
-                            <X className="w-4 h-4" />
+                            <X className="w-3 h-3 sm:w-4 sm:h-4" />
                           </Button>
                         </div>
                       ))}
                     </div>
 
-                    <div className="border-t pt-6 mt-auto flex-shrink-0">
-                      <div className="flex justify-between items-center mb-4">
-                        <span className="text-lg font-bold text-stone-800">Total:</span>
-                        <span className="text-2xl font-bold text-emerald-600">{total} MAD</span>
+                    <div className="border-t pt-4 sm:pt-6 mt-auto flex-shrink-0">
+                      <div className="flex justify-between items-center mb-3 sm:mb-4">
+                        <span className="text-base sm:text-lg font-bold text-stone-800">Total:</span>
+                        <span className="text-xl sm:text-2xl font-bold text-emerald-600">{total} MAD</span>
                       </div>
                       <Button
                         onClick={openOrderForm}
-                        className="w-full bg-emerald-600/80 hover:bg-emerald-700/80 text-lg py-6 rounded-lg backdrop-blur-md"
+                        className="w-full bg-emerald-600/80 hover:bg-emerald-700/80 text-base sm:text-lg py-4 sm:py-6 rounded-lg backdrop-blur-md"
                       >
-                        <MessageCircle className="w-5 h-5 mr-2" />
+                        <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                         Commander via WhatsApp
                       </Button>
                     </div>
@@ -889,10 +955,10 @@ function App() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsChatbotOpen(!isChatbotOpen)}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center z-50 chatbot-glow"
+        className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 w-12 h-12 sm:w-14 sm:h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center z-50 chatbot-glow"
         style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.18)' }}
       >
-        <Bot className="w-8 h-8" />
+        <Bot className="w-6 h-6 sm:w-8 sm:h-8" />
         <style>{`
           .chatbot-glow:hover {
             box-shadow: 0 0 0 0 #2563eb, 0 0 16px 4px #2563eb66, 0 4px 16px rgba(0,0,0,0.18);
@@ -913,8 +979,8 @@ function App() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 40, scale: 0.95 }}
             transition={{ duration: 0.35, type: 'spring', stiffness: 80 }}
-            className="fixed right-6 bottom-[88px] z-50 w-full"
-            style={{ minWidth: 320, maxWidth: 384 }}
+            className="fixed right-4 sm:right-6 bottom-[72px] sm:bottom-[88px] z-50 w-full"
+            style={{ minWidth: 280, maxWidth: 384 }}
           >
             <ChatBot
               isOpen={isChatbotOpen}
@@ -929,38 +995,38 @@ function App() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.7, type: 'spring', stiffness: 60 }}
-        className="bg-stone-900 text-white py-12"
+        className="bg-stone-900 text-white py-8 sm:py-12"
       >
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 text-center md:text-left">
             <div>
-              <h3 className="text-2xl font-serif font-bold mb-4">FreshMarket</h3>
-              <p className="text-stone-300">
+              <h3 className="text-xl sm:text-2xl font-serif font-bold mb-3 sm:mb-4">FreshMarket</h3>
+              <p className="text-stone-300 text-sm sm:text-base">
                 Votre source de confiance pour des produits frais et des desserts marocains authentiques.
               </p>
             </div>
             <div>
-              <h4 className="font-bold mb-4 text-lg">Contact</h4>
-              <div className="space-y-2 text-stone-300">
+              <h4 className="font-bold mb-3 sm:mb-4 text-base sm:text-lg">Contact</h4>
+              <div className="space-y-2 text-stone-300 text-sm sm:text-base">
                 <div className="flex items-center justify-center md:justify-start">
                   <Phone className="w-4 h-4 mr-2" />
                   <span>+212 6 00 00 00 00</span>
                 </div>
                 <div className="flex items-center justify-center md:justify-start">
                   <MapPin className="w-4 h-4 mr-2" />
-                  <span>Casablanca, Maroc</span>
+                  <span>Marrakech , Maroc</span>
                 </div>
               </div>
             </div>
             <div>
-              <h4 className="font-bold mb-4 text-lg">Horaires</h4>
-              <div className="text-stone-300">
+              <h4 className="font-bold mb-3 sm:mb-4 text-base sm:text-lg">Horaires</h4>
+              <div className="text-stone-300 text-sm sm:text-base">
                 <p>Lun - Sam: 8h00 - 20h00</p>
                 <p>Dimanche: 9h00 - 18h00</p>
               </div>
             </div>
           </div>
-          <div className="border-t border-stone-700 mt-8 pt-8 text-center text-stone-400">
+          <div className="border-t border-stone-700 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-stone-400 text-sm sm:text-base">
             <p>&copy; 2024 FreshMarket. Tous droits réservés.</p>
           </div>
         </div>
@@ -1005,4 +1071,5 @@ const ScrollToTop = () => {
 };
 
 export default Root
+
 
