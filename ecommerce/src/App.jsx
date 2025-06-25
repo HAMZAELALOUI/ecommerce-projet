@@ -15,6 +15,9 @@ import ProductsAdmin from './pages/admin/ProductsAdmin.jsx'
 import CategoriesAdmin from './pages/admin/CategoriesAdmin.jsx'
 import { fetchProducts, fetchCategories } from './services/apiService.js'
 import { toast } from 'sonner'
+import ProtectedRoute from './components/admin/ProtectedRoute.jsx'
+import Login from './pages/Login.jsx'
+import Profile from './pages/admin/Profile.jsx'
 
 // Données des produits - SERONT REMPLACÉES PAR L'API
 // const products = [ ... ];
@@ -438,7 +441,7 @@ function App() {
             <a href="#histoire" onClick={scrollToHistoire} className="text-gray-600 hover:text-emerald-600 transition-colors">Notre Histoire</a>
             <NavLink to="/#products" className="text-gray-600 hover:text-emerald-600 transition-colors">Produits</NavLink>
             <NavLink to="/#packs" className="text-gray-600 hover:text-emerald-600 transition-colors">Nos Packs</NavLink>
-            <NavLink to="/admin" className="text-gray-600 hover:text-emerald-600 transition-colors">Admin</NavLink>
+            <NavLink to="/login" className="text-gray-600 hover:text-emerald-600 transition-colors">Admin</NavLink>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -511,7 +514,7 @@ function App() {
                   Nos Packs
                 </NavLink>
                 <NavLink 
-                  to="/admin" 
+                  to="/login" 
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="block py-2 px-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
                 >
@@ -1050,10 +1053,14 @@ function Root() {
       <ScrollToTop />
       <Routes>
         <Route path="/*" element={<App />} />
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="products" element={<ProductsAdmin />} />
-          <Route path="categories" element={<CategoriesAdmin />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/admin" element={<ProtectedRoute />}>
+          <Route element={<AdminLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="products" element={<ProductsAdmin />} />
+            <Route path="categories" element={<CategoriesAdmin />} />
+            <Route path="profile" element={<Profile />} />
+          </Route>
         </Route>
       </Routes>
     </Router>

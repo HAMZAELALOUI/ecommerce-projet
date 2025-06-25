@@ -122,8 +122,8 @@ class Product {
   // Créer un nouveau produit
   static create(product, callback) {
     db.query(
-      'INSERT INTO products (name, category, price, image, description, unit) VALUES (?, ?, ?, ?, ?, ?)',
-      [product.name, product.category, product.price, product.image, product.description, product.unit],
+      'INSERT INTO products (name, description, price, category, image, unit, is_active, is_featured) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      [product.name, product.description, product.price, product.category, product.image, product.unit, product.active, product.featured],
       callback
     );
   }
@@ -131,8 +131,8 @@ class Product {
   // Mettre à jour un produit
   static update(id, product, callback) {
     db.query(
-      'UPDATE products SET name = ?, category = ?, price = ?, image = ?, description = ?, unit = ? WHERE id = ?',
-      [product.name, product.category, product.price, product.image, product.description, product.unit, id],
+      'UPDATE products SET name = ?, description = ?, price = ?, category = ?, image = ?, unit = ?, is_active = ?, is_featured = ? WHERE id = ?',
+      [product.name, product.description, product.price, product.category, product.image, product.unit, product.active, product.featured, id],
       callback
     );
   }

@@ -24,20 +24,33 @@ const ProductForm = ({ isOpen, setIsOpen, product, onSave }) => {
   
   useEffect(() => {
     if (product) {
-      reset(product);
+      reset({
+        ...product,
+        category: product.category || product.category_id || '',
+      });
     } else {
-      reset({ name: '', description: '', price: '', category_id: '', image: '', unit: '', is_active: true, is_featured: false });
+      reset({ name: '', description: '', price: '', category: '', image: '', unit: '', is_active: true, is_featured: false });
     }
   }, [product, reset, isOpen]);
 
   const onSubmit = async (data) => {
     setIsLoading(true);
-    // TODO: Handle file upload logic if necessary
+    const payload = {
+      name: data.name,
+      description: data.description,
+      price: data.price,
+      category: data.category,
+      image: data.image,
+      unit: data.unit,
+      is_active: data.is_active,
+      is_featured: data.is_featured,
+    };
+    console.log('Payload envoyé au backend:', payload);
     try {
       if (product) {
-        await updateProduct(product.id, data);
+        await updateProduct(product.id, payload);
       } else {
-        await createProduct(data);
+        await createProduct(payload);
       }
       onSave();
       setIsOpen(false);
@@ -70,7 +83,7 @@ const ProductForm = ({ isOpen, setIsOpen, product, onSave }) => {
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="category" className="text-right">Category</Label>
-            <Select onValueChange={(value) => setValue('category_id', value)} value={categoryId}>
+            <Select onValueChange={(value) => setValue('category', value)} value={watch('category')}>
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>

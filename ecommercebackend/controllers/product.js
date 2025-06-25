@@ -123,60 +123,31 @@ const searchProducts = async (req, res) => {
 // Créer un nouveau produit
 const createProduct = async (req, res) => {
   try {
-    const { name, price, category_id } = req.body;
-    
-    // Validation des données
-    if (!name || name.trim() === '') {
-      return res.status(400).json({
-        success: false,
-        message: 'Le nom du produit est requis'
-      });
+    const { name, description, price, category, image, unit, active, featured } = req.body;
+
+    if (!name || !price) {
+      return res.status(400).json({ success: false, message: 'Champs obligatoires manquants' });
     }
-    
-    if (!price || isNaN(price) || price <= 0) {
-      return res.status(400).json({
-        success: false,
-        message: 'Le prix doit être un nombre positif'
-      });
-    }
-    
+
     const productData = {
       name: name.trim(),
+      description: description || null,
       price: parseFloat(price),
-      category_id: category_id || null
+      category: category || null,
+      image: image || null,
+      unit: unit || null,
+      active: active ? 1 : 0,
+      featured: featured ? 1 : 0
     };
-    
+
     Product.create(productData, (err, newProduct) => {
       if (err) {
-        console.error('Erreur lors de la création du produit:', err);
-        
-        // Gestion des erreurs MySQL spécifiques
-        if (err.code === 'ER_NO_REFERENCED_ROW_2') {
-          return res.status(400).json({
-            success: false,
-            message: 'La catégorie spécifiée n\'existe pas'
-          });
-        }
-        
-        return res.status(500).json({
-          success: false,
-          message: 'Erreur lors de la création du produit',
-          error: err.message
-        });
+        return res.status(500).json({ success: false, message: 'Erreur lors de la création du produit', error: err.message });
       }
-      
-      res.status(201).json({
-        success: true,
-        message: 'Produit créé avec succès',
-        data: newProduct
-      });
+      res.status(201).json({ success: true, message: 'Produit créé avec succès', data: newProduct });
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Erreur interne du serveur',
-      error: error.message
-    });
+    res.status(500).json({ success: false, message: 'Erreur interne du serveur', error: error.message });
   }
 };
 
@@ -184,59 +155,31 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const productId = req.params.id;
-    const { name, price, category_id } = req.body;
-    
-    // Validation des données
-    if (!name || name.trim() === '') {
-      return res.status(400).json({
-        success: false,
-        message: 'Le nom du produit est requis'
-      });
+    const { name, description, price, category, image, unit, active, featured } = req.body;
+
+    if (!name || !price) {
+      return res.status(400).json({ success: false, message: 'Champs obligatoires manquants' });
     }
-    
-    if (!price || isNaN(price) || price <= 0) {
-      return res.status(400).json({
-        success: false,
-        message: 'Le prix doit être un nombre positif'
-      });
-    }
-    
+
     const productData = {
       name: name.trim(),
+      description: description || null,
       price: parseFloat(price),
-      category_id: category_id || null
+      category: category || null,
+      image: image || null,
+      unit: unit || null,
+      active: active ? 1 : 0,
+      featured: featured ? 1 : 0
     };
-    
+
     Product.update(productId, productData, (err, updatedProduct) => {
       if (err) {
-        console.error('Erreur lors de la mise à jour du produit:', err);
-        
-        if (err.code === 'ER_NO_REFERENCED_ROW_2') {
-          return res.status(400).json({
-            success: false,
-            message: 'La catégorie spécifiée n\'existe pas'
-          });
-        }
-        
-        return res.status(500).json({
-          success: false,
-          message: 'Erreur lors de la mise à jour du produit',
-          error: err.message
-        });
+        return res.status(500).json({ success: false, message: 'Erreur lors de la mise à jour du produit', error: err.message });
       }
-      
-      res.json({
-        success: true,
-        message: 'Produit mis à jour avec succès',
-        data: updatedProduct
-      });
+      res.json({ success: true, message: 'Produit mis à jour avec succès', data: updatedProduct });
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Erreur interne du serveur',
-      error: error.message
-    });
+    res.status(500).json({ success: false, message: 'Erreur interne du serveur', error: error.message });
   }
 };
 
