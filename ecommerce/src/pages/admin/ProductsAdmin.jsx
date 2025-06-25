@@ -22,21 +22,6 @@ import {
   ChevronDown
 } from 'lucide-react';
 import ProductForm from '@/components/admin/ProductForm';
-import bananeImg from '@/assets/banane.jpeg';
-import carotteImg from '@/assets/Carrote.jpeg';
-import cornesDeGazelleImg from '@/assets/Cornes de Gazelle.jpeg';
-import courgettesImg from '@/assets/Courgettes.jpeg';
-import dessertsImg from '@/assets/desserts.jpg';
-import foodImg from '@/assets/food.jpg';
-import fraiseImg from '@/assets/fraise.jpeg';
-import fruitsImg from '@/assets/fruits.jpg';
-import logoImg from '@/assets/logo.jpeg';
-import makroudhImg from '@/assets/Makroudh.jpeg';
-import orangesImg from '@/assets/oranges.jpeg';
-import poivronsImg from '@/assets/Poivrons.jpeg';
-import pommerougeImg from '@/assets/pommerouge.jpeg';
-import tomatesImg from '@/assets/tomates.jpg';
-import vegetablesImg from '@/assets/vegetables.jpg';
 
 const ProductsAdmin = () => {
   const [products, setProducts] = useState([]);
@@ -150,23 +135,23 @@ const ProductsAdmin = () => {
     outOfStock: products.filter(p => p.stock === 0).length,
   };
 
-  // Fonction utilitaire pour associer un nom de produit à une image locale
+  // Modifier la fonction getProductImage pour retourner le chemin public assets
   const getProductImage = (productName) => {
     const name = productName.toLowerCase();
-    if (name.includes('banane')) return bananeImg;
-    if (name.includes('carotte')) return carotteImg;
-    if (name.includes('courgette')) return courgettesImg;
-    if (name.includes('fraise')) return fraiseImg;
-    if (name.includes('pomme')) return pommerougeImg;
-    if (name.includes('orange')) return orangesImg;
-    if (name.includes('poivron')) return poivronsImg;
-    if (name.includes('tomate')) return tomatesImg;
-    if (name.includes('makroudh')) return makroudhImg;
-    if (name.includes('cornes')) return cornesDeGazelleImg;
-    if (name.includes('dessert')) return dessertsImg;
-    if (name.includes('légume') || name.includes('legume')) return vegetablesImg;
-    if (name.includes('fruit')) return fruitsImg;
-    return foodImg;
+    if (name.includes('banane')) return '/assets/banane.jpeg';
+    if (name.includes('carotte')) return '/assets/Carrote.jpeg';
+    if (name.includes('courgette')) return '/assets/Courgettes.jpeg';
+    if (name.includes('fraise')) return '/assets/fraise.jpeg';
+    if (name.includes('pomme')) return '/assets/pommerouge.jpeg';
+    if (name.includes('orange')) return '/assets/oranges.jpeg';
+    if (name.includes('poivron')) return '/assets/Poivrons.jpeg';
+    if (name.includes('tomate')) return '/assets/tomates.jpg';
+    if (name.includes('makroudh')) return '/assets/Makroudh.jpeg';
+    if (name.includes('cornes')) return '/assets/Cornes de Gazelle.jpeg';
+    if (name.includes('dessert')) return '/assets/desserts.jpg';
+    if (name.includes('légume') || name.includes('legume')) return '/assets/vegetables.jpg';
+    if (name.includes('fruit')) return '/assets/fruits.jpg';
+    return '/assets/food.jpg';
   };
 
   if (loading) {

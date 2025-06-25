@@ -6,24 +6,7 @@ import { ShoppingCart, Plus, Minus, X, MessageCircle, Phone, MapPin, Star, Bot }
 import { motion, AnimatePresence } from 'framer-motion'
 import WhatsAppOrderForm from './components/WhatsAppOrderForm.jsx'
 import ChatBot from './components/ChatBot.jsx'
-import bananeImg from '@/assets/banane.jpeg'
-import carotteImg from '@/assets/Carrote.jpeg'
-import cornesDeGazelleImg from '@/assets/Cornes de Gazelle.jpeg'
-import courgettesImg from '@/assets/Courgettes.jpeg'
-import dessertsImg from '@/assets/desserts.jpg'
-import foodImg from '@/assets/food.jpg'
-import fraiseImg from '@/assets/fraise.jpeg'
-import fruitsImg from '@/assets/fruits.jpg'
-import logoImg from '@/assets/logo.jpeg'
-import makroudhImg from '@/assets/Makroudh.jpeg'
-import orangesImg from '@/assets/oranges.jpeg'
-import poivronsImg from '@/assets/Poivrons.jpeg'
-import pommerougeImg from '@/assets/pommerouge.jpeg'
-import tomatesImg from '@/assets/tomates.jpg'
-import vegetablesImg from '@/assets/vegetables.jpg'
 import FloatingActions from './components/FloatingActions.jsx'
-import heroBg from './assets/food.jpg'
-import histoireImg from './assets/desserts.jpg'
 import './App.css'
 import { BrowserRouter as Router, Routes, Route, Link, NavLink, useLocation } from 'react-router-dom'
 import AdminLayout from './components/admin/AdminLayout.jsx'
@@ -134,23 +117,23 @@ const categoryIcons = {
   'Viandes': '🥩',
 };
 
-// Fonction utilitaire pour associer un nom de produit à une image locale
+// Modifier la fonction getProductImage pour retourner le chemin public assets
 const getProductImage = (productName) => {
   const name = productName.toLowerCase();
-  if (name.includes('banane')) return bananeImg;
-  if (name.includes('carotte')) return carotteImg;
-  if (name.includes('courgette')) return courgettesImg;
-  if (name.includes('fraise')) return fraiseImg;
-  if (name.includes('pomme')) return pommerougeImg;
-  if (name.includes('orange')) return orangesImg;
-  if (name.includes('poivron')) return poivronsImg;
-  if (name.includes('tomate')) return tomatesImg;
-  if (name.includes('makroudh')) return makroudhImg;
-  if (name.includes('cornes')) return cornesDeGazelleImg;
-  if (name.includes('dessert')) return dessertsImg;
-  if (name.includes('légume') || name.includes('legume')) return vegetablesImg;
-  if (name.includes('fruit')) return fruitsImg;
-  return foodImg;
+  if (name.includes('banane')) return '/assets/banane.jpeg';
+  if (name.includes('carotte')) return '/assets/Carrote.jpeg';
+  if (name.includes('courgette')) return '/assets/Courgettes.jpeg';
+  if (name.includes('fraise')) return '/assets/fraise.jpeg';
+  if (name.includes('pomme')) return '/assets/pommerouge.jpeg';
+  if (name.includes('orange')) return '/assets/oranges.jpeg';
+  if (name.includes('poivron')) return '/assets/Poivrons.jpeg';
+  if (name.includes('tomate')) return '/assets/tomates.jpg';
+  if (name.includes('makroudh')) return '/assets/Makroudh.jpeg';
+  if (name.includes('cornes')) return '/assets/Cornes de Gazelle.jpeg';
+  if (name.includes('dessert')) return '/assets/desserts.jpg';
+  if (name.includes('légume') || name.includes('legume')) return '/assets/vegetables.jpg';
+  if (name.includes('fruit')) return '/assets/fruits.jpg';
+  return '/assets/food.jpg';
 };
 
 function PacksPage() {
@@ -445,7 +428,7 @@ function App() {
       <header className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm shadow-sm z-40">
         <div className="container mx-auto px-4 py-2 sm:py-3 flex justify-between items-center">
           <Link to="/" className="flex items-center space-x-2">
-            <img src={logoImg} alt="FreshMarket Logo" className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 rounded-full" />
+            <img src="/assets/logo.jpeg" alt="FreshMarket Logo" className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 rounded-full" />
             <span className="text-lg sm:text-xl font-bold font-serif text-stone-800">FreshMarket</span>
           </Link>
           
@@ -551,7 +534,7 @@ function App() {
             className="absolute inset-0 z-0"
           >
             <img
-              src={heroBg}
+              src="/assets/food.jpg"
               alt="Fresh Food Background"
               className="w-full h-full object-cover"
             />
@@ -611,7 +594,7 @@ function App() {
                 viewport={{ once: true }}
               >
                 <img
-                  src={fruitsImg}
+                  src="/assets/fruits.jpg"
                   alt="Fruits et Légumes"
                   className="w-full h-auto max-h-[500px] object-cover rounded-2xl shadow-xl"
                 />
@@ -1002,7 +985,7 @@ function App() {
             {/* Bloc logo & description */}
             <div className="flex-1 flex flex-col items-center md:items-start mb-6 md:mb-0">
               <div className="flex items-center gap-3 mb-3">
-                <img src={logoImg} alt="FreshMarket Logo" className="h-10 w-10 rounded-full shadow-lg border-2 border-emerald-500" />
+                <img src="/assets/logo.jpeg" alt="FreshMarket Logo" className="h-10 w-10 rounded-full shadow-lg border-2 border-emerald-500" />
                 <h3 className="text-2xl font-serif font-extrabold tracking-tight">FreshMarket</h3>
               </div>
               <p className="text-stone-300 text-base max-w-xs">
