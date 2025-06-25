@@ -123,7 +123,8 @@ const searchProducts = async (req, res) => {
 // Créer un nouveau produit
 const createProduct = async (req, res) => {
   try {
-    const { name, description, price, category, image, unit, active, featured } = req.body;
+    const { name, description, price, category, unit, active, featured } = req.body;
+    const image = req.file ? req.file.filename : null;
 
     if (!name || !price) {
       return res.status(400).json({ success: false, message: 'Champs obligatoires manquants' });
@@ -134,7 +135,7 @@ const createProduct = async (req, res) => {
       description: description || null,
       price: parseFloat(price),
       category: category || null,
-      image: image || null,
+      image: image,
       unit: unit || null,
       active: active ? 1 : 0,
       featured: featured ? 1 : 0
@@ -155,7 +156,8 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const productId = req.params.id;
-    const { name, description, price, category, image, unit, active, featured } = req.body;
+    const { name, description, price, category, unit, active, featured } = req.body;
+    const image = req.file ? req.file.filename : null;
 
     if (!name || !price) {
       return res.status(400).json({ success: false, message: 'Champs obligatoires manquants' });
@@ -166,7 +168,7 @@ const updateProduct = async (req, res) => {
       description: description || null,
       price: parseFloat(price),
       category: category || null,
-      image: image || null,
+      image: image,
       unit: unit || null,
       active: active ? 1 : 0,
       featured: featured ? 1 : 0

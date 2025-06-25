@@ -1,4 +1,6 @@
 const db = require('../config/db');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' }); // dossier où stocker les images
 
 class Product {
   // Récupérer tous les produits avec leurs catégories
